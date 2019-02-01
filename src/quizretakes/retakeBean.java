@@ -27,10 +27,10 @@ import java.time.*;
 
 public class retakeBean implements Comparable<retakeBean>
 {
-   private int retakeID;
-   private String location;
-   private LocalDate whenOffered;
-   private LocalTime timeOffered;
+   private final int retakeID;
+   private final String location;
+   private final LocalDate whenOffered;
+   private final LocalTime timeOffered;
 
    public retakeBean (int ID, String location, int month, int day, int hour, int minute)
    {

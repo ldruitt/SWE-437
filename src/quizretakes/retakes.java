@@ -10,7 +10,7 @@ import java.util.*;
 
 public class retakes implements Iterable<retakeBean>
 {
-   private ArrayList<retakeBean> retakes;
+   private final ArrayList<retakeBean> retakes;
 
    // ***** Constructors //
    public retakes ()

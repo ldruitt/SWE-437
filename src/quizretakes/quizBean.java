@@ -26,9 +26,9 @@ import java.time.*;
 
 public class quizBean implements Comparable<quizBean>
 {
-   private int ID;
-   private LocalDate dateGiven;
-   private LocalTime timeGiven;
+   private final int ID;
+   private final LocalDate dateGiven;
+   private final LocalTime timeGiven;
 
    // *** Constructor *** //
    public quizBean (int quizID, int month, int day, int hour, int minute)

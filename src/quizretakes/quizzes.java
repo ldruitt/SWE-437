@@ -11,7 +11,7 @@ import java.util.*;
 
 public class quizzes implements Iterable<quizBean>
 {
-   private ArrayList<quizBean> quizzes;
+   private final ArrayList<quizBean> quizzes;
 
    // ***** Constructors //
    public quizzes ()

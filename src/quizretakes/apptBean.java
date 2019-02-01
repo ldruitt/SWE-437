@@ -8,9 +8,9 @@ package quizretakes;
 
 public class apptBean
 {
-   private int quizID;
-   private int retakeID;
-   private String name;
+   private final int quizID;
+   private final int retakeID;
+   private final String name;
 
    // *** Constructor *** //
    public apptBean (int retakeID, int quizID, String name)
