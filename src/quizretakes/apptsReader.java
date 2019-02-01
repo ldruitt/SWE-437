@@ -22,7 +22,7 @@ public ArrayList read (String filename) throws IOException
 {
 
    // read appointments file
-   ArrayList<apptBean> appts = new ArrayList<apptBean>();
+   ArrayList<apptBean> appts = new ArrayList<>();
    apptBean a;
    File file = new File(filename);
    if (!file.exists())

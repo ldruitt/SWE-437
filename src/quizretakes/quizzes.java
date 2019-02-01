@@ -16,19 +16,19 @@ public class quizzes implements Iterable<quizBean>
    // ***** Constructors //
    public quizzes ()
    {
-      quizzes = new ArrayList<quizBean>();
+      quizzes = new ArrayList<>();
    }
 
    public quizzes (int quizID, int month, int day, int hour, int minute)
    {  // Adds one quiz to a new list
-      quizzes = new ArrayList<quizBean>();
+      quizzes = new ArrayList<>();
       quizBean qb = new quizBean (quizID, month, day, hour, minute);
       quizzes.add (qb);
    }
 
    public quizzes (quizBean qb)
    {
-      quizzes = new ArrayList<quizBean>();
+      quizzes = new ArrayList<>();
       quizzes.add (qb);
    }
 

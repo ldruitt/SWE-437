@@ -15,19 +15,19 @@ public class retakes implements Iterable<retakeBean>
    // ***** Constructors //
    public retakes ()
    {
-      retakes = new ArrayList<retakeBean>();
+      retakes = new ArrayList<>();
    }
 
    public retakes (int ID, String location, int month, int day, int hour, int minute)
    {
-      retakes = new ArrayList<retakeBean>();
+      retakes = new ArrayList<>();
       retakeBean qr = new retakeBean (ID, location, month, day, hour, minute);
       retakes.add (qr);
    }
 
    public retakes (retakeBean qr)
    {
-      retakes = new ArrayList<retakeBean>();
+      retakes = new ArrayList<>();
       retakes.add (qr);
    }
 

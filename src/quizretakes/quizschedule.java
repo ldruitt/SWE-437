@@ -237,12 +237,12 @@ private void printQuizScheduleForm (PrintWriter out, quizzes quizList, retakes r
    out.println ("  <br/>");
 
    LocalDate today  = LocalDate.now();
-   LocalDate endDay = today.plusDays(new Long(daysAvailable));
+   LocalDate endDay = today.plusDays((long) daysAvailable);
    LocalDate origEndDay = endDay;
    // if endDay is between startSkip and endSkip, add 7 to endDay
    if (!endDay.isBefore(startSkip) && !endDay.isAfter(endSkip))
    {  // endDay is in a skip week, add 7 to endDay
-      endDay = endDay.plusDays(new Long(7));
+      endDay = endDay.plusDays(7L);
       skip = true;
    }
 
@@ -285,7 +285,7 @@ private void printQuizScheduleForm (PrintWriter out, quizzes quizList, retakes r
          for(quizBean q: quizList)
          {
             LocalDate quizDay = q.getDate();
-            LocalDate lastAvailableDay = quizDay.plusDays(new Long(daysAvailable));
+            LocalDate lastAvailableDay = quizDay.plusDays((long) daysAvailable);
             // To retake a quiz on a given retake day, the retake day must be within two ranges:
             // quizDay <= retakeDay <= lastAvailableDay --> (!quizDay > retakeDay) && !(retakeDay > lastAvailableDay)
             // today <= retakeDay <= endDay --> !(today > retakeDay) && !(retakeDay > endDay)
