@@ -23,8 +23,6 @@ import org.xml.sax.SAXException;
 
 // These classes read the sample XML file and manage output:
 import java.io.File;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 
 public class courseReader
 {

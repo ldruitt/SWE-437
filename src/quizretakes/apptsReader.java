@@ -5,7 +5,6 @@
 package quizretakes;
 
 import java.lang.*;
-import java.io.IOException;
 
 
 import java.util.*;

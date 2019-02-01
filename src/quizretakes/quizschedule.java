@@ -4,13 +4,8 @@ package quizretakes;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
-import javax.servlet.ServletContext;
-import java.io.IOException;
 import java.io.PrintWriter;
-import javax.xml.parsers.ParserConfigurationException;
-import java.util.ArrayList;
 import java.time.*;
 import java.lang.Long;
 import java.lang.String;
@@ -18,8 +13,6 @@ import java.lang.String;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.BufferedReader;
 import java.io.IOException;
 
 /**
