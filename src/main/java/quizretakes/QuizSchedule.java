@@ -37,7 +37,7 @@ import java.io.IOException;
  * retakes.xml -- Data file of when retakes are given
  */
 
-public class quizschedule extends HttpServlet {
+public class QuizSchedule extends HttpServlet {
 	// Data files
 	// location maps to /webapps/offutt/WEB-INF/data/ from a terminal window.
 	// These names show up in all servlets
@@ -71,7 +71,7 @@ public class quizschedule extends HttpServlet {
 			IOException {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		servletUtils.printHeader(out);
+		ServletUtils.printHeader(out);
 
 		// Whoami? (Used in form)
 		thisServlet = (request.getRequestURL()).toString();
@@ -91,8 +91,8 @@ public class quizschedule extends HttpServlet {
 			} catch(Exception e) {
 				String message = "<p>Can't find the data files for course ID " + courseID + ". " +
 						"You" + " can try again.";
-				servletUtils.printNeedCourseID(out, thisServlet, message);
-				servletUtils.printFooter(out);
+				ServletUtils.printNeedCourseID(out, thisServlet, message);
+				ServletUtils.printFooter(out);
 				return;
 			}
 			daysAvailable = Integer.parseInt(course.getRetakeDuration());
@@ -103,8 +103,8 @@ public class quizschedule extends HttpServlet {
 			String apptsFileName = dataLocation + apptsBase + "-" + courseID + ".txt";
 
 			// Load the quizzes and the retake times from disk
-			quizzes quizList;
-			retakes retakesList;
+			Quizzes quizList;
+			Retakes retakesList;
 
 			try { // Read the files and print the form
 				quizList = ReaderUtils.quizzes(quizzesFileName);
@@ -113,12 +113,12 @@ public class quizschedule extends HttpServlet {
 			} catch(Exception e) {
 				String message = "<p>Can't find the data files for course ID " + courseID + ". " +
 						"You" + " can try again.";
-				servletUtils.printNeedCourseID(out, thisServlet, message);
+				ServletUtils.printNeedCourseID(out, thisServlet, message);
 			}
 		} else {
-			servletUtils.printNeedCourseID(out, thisServlet, "");
+			ServletUtils.printNeedCourseID(out, thisServlet, "");
 		}
-		servletUtils.printFooter(out);
+		ServletUtils.printFooter(out);
 	}
 
 	/**
@@ -146,7 +146,7 @@ public class quizschedule extends HttpServlet {
 
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		servletUtils.printHeader(out);
+		ServletUtils.printHeader(out);
 		out.println("<body bgcolor=\"#DDEEDD\">");
 
 		if(allIDs != null && studentName != null && studentName.length() > 0) {
@@ -202,7 +202,7 @@ public class quizschedule extends HttpServlet {
 			out.println("<p><a href='" + thisServlet + "?courseID=" + courseID + "'>You can try "
 					+ "again if you like.</a>");
 		}
-		servletUtils.printFooter(out);
+		ServletUtils.printFooter(out);
 	}
 
 	/**
@@ -211,7 +211,7 @@ public class quizschedule extends HttpServlet {
 	 * @param out
 	 * 		PrintWriter
 	 */
-	private void printQuizScheduleForm(PrintWriter out, quizzes quizList, retakes retakesList,
+	private void printQuizScheduleForm(PrintWriter out, Quizzes quizList, Retakes retakesList,
 									   CourseBean course) {
 		// Check for a week to skip
 		boolean skip = false;

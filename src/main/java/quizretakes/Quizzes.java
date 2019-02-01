@@ -12,17 +12,17 @@ import java.util.*;
  * @author Jeff Offutt
  */
 
-public class quizzes implements Iterable<QuizBean> {
+public class Quizzes implements Iterable<QuizBean> {
 	private final List<QuizBean> quizzes = new ArrayList<>();
 
-	public quizzes(){}
+	public Quizzes(){}
 
-	public quizzes(int quizID, int month, int day, int hour, int minute) {
+	public Quizzes(int quizID, int month, int day, int hour, int minute) {
 		QuizBean qb = new QuizBean(quizID, month, day, hour, minute);
 		quizzes.add(qb);
 	}
 
-	public quizzes(QuizBean qb) {
+	public Quizzes(QuizBean qb) {
 		quizzes.add(qb);
 	}
 

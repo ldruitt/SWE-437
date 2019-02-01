@@ -37,9 +37,9 @@ public class ReaderUtils {
 		return (appts);
 	}
 
-	public static retakes retakes(String filename) throws IOException,
+	public static Retakes retakes(String filename) throws IOException,
 			ParserConfigurationException, SAXException {
-		retakes retakeList = new retakes();
+		Retakes retakeList = new Retakes();
 		RetakeBean retake;
 
 		DocumentBuilder builder = factory.newDocumentBuilder();
@@ -124,9 +124,9 @@ public class ReaderUtils {
 		return (course);
 	}
 
-	public static quizzes quizzes(String filename) throws IOException,
+	public static Quizzes quizzes(String filename) throws IOException,
 			ParserConfigurationException, SAXException {
-		quizzes quizList = new quizzes();
+		Quizzes quizList = new Quizzes();
 
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document document = builder.parse(new File(filename));

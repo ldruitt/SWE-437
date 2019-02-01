@@ -9,7 +9,7 @@ import java.io.PrintWriter;
  * Date: January, 2019
  * Used by all servlets
  */
-public class servletUtils {
+public class ServletUtils {
 
 	/**
 	 * Print the header of the HTML pages
