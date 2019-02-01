@@ -51,8 +51,6 @@ public class quizschedule extends HttpServlet
    private static final String retakesBase = "quiz-retakes";
    private static final String apptsBase   = "quiz-appts";
 
-   // Filenames to be built from above and the courseID parameter
-   private String courseFileName;
    private String quizzesFileName;
    private String retakesFileName;
    private String apptsFileName;
@@ -88,7 +86,8 @@ protected void doGet (HttpServletRequest request, HttpServletResponse response)
    {  // If not, ask for one.
       courseBean course;
       courseReader cr = new courseReader();
-      courseFileName = dataLocation + courseBase + "-" + courseID + ".xml";
+      // Filenames to be built from above and the courseID parameter
+      String courseFileName = dataLocation + courseBase + "-" + courseID + ".xml";
       try {
          course = cr.read(courseFileName);
       } catch (Exception e) {
@@ -105,8 +104,8 @@ protected void doGet (HttpServletRequest request, HttpServletResponse response)
       String apptsFileName   = dataLocation + apptsBase   + "-" + courseID + ".txt";
 
       // Load the quizzes and the retake times from disk
-      quizzes quizList    = new quizzes();
-      retakes retakesList = new retakes();
+      quizzes quizList    ;
+      retakes retakesList ;
       quizReader    qr = new quizReader();
       retakesReader rr = new retakesReader();
 
