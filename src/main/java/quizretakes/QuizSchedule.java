@@ -18,21 +18,7 @@ import java.io.IOException;
 /**
  * @author Jeff Offutt
  * Date: January, 2019
- * Wiring the pieces together:
- * quizschedule.java -- Servlet entry point for students to schedule quizzes
- * quizReader.java -- reads XML file and stores in quizzes.
- * Used by quizschedule.java
- * quizzes.java -- A list of quizzes from the XML file
- * Used by quizschedule.java
- * QuizBean.java -- A simple quiz bean
- * Used by quizzes.java and readQuizzesXML.java
- * retakesReader.java -- reads XML file and stores in retakes.
- * Used by quizschedule.java
- * retakes.java -- A list of retakes from the XML file
- * Used by quizschedule.java
- * RetakeBean.java -- A simple retake bean
- * Used by retakes.java and readRetakesXML.java
- * AppointmentBean.java -- A bean to hold appointments
+ *
  * quizzes.xml -- Data file of when quizzes were given
  * retakes.xml -- Data file of when retakes are given
  */
