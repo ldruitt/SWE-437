@@ -4,6 +4,8 @@
 
 package quizretakes;
 
+import quizretakes.bean.AppointmentBean;
+
 import java.lang.*;
 
 
@@ -22,8 +24,8 @@ public ArrayList read (String filename) throws IOException
 {
 
    // read appointments file
-   ArrayList<apptBean> appts = new ArrayList<>();
-   apptBean a;
+   ArrayList<AppointmentBean> appts = new ArrayList<>();
+   AppointmentBean a;
    File file = new File(filename);
    if (!file.exists())
    {
@@ -38,7 +40,7 @@ public ArrayList read (String filename) throws IOException
       while ((line = bw.readLine()) != null)
       {
          String[] s = line.split(separator);
-         a = new apptBean (Integer.parseInt(s[0]), Integer.parseInt(s[1]), s[2]);
+         a = new AppointmentBean(Integer.parseInt(s[0]), Integer.parseInt(s[1]), s[2]);
          appts.add(a);
       }
       bw.close();

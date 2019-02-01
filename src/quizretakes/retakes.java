@@ -1,5 +1,7 @@
 package quizretakes;
 
+import quizretakes.bean.RetakeBean;
+
 import java.util.*;
 
 /**
@@ -8,9 +10,9 @@ import java.util.*;
  * @author Jeff Offutt
  */
 
-public class retakes implements Iterable<retakeBean>
+public class retakes implements Iterable<RetakeBean>
 {
-   private final ArrayList<retakeBean> retakes;
+   private final ArrayList<RetakeBean> retakes;
 
    // ***** Constructors //
    public retakes ()
@@ -21,11 +23,11 @@ public class retakes implements Iterable<retakeBean>
    public retakes (int ID, String location, int month, int day, int hour, int minute)
    {
       retakes = new ArrayList<>();
-      retakeBean qr = new retakeBean (ID, location, month, day, hour, minute);
+      RetakeBean qr = new RetakeBean(ID, location, month, day, hour, minute);
       retakes.add (qr);
    }
 
-   public retakes (retakeBean qr)
+   public retakes (RetakeBean qr)
    {
       retakes = new ArrayList<>();
       retakes.add (qr);
@@ -38,13 +40,13 @@ public class retakes implements Iterable<retakeBean>
    }
 
    @Override
-   public Iterator<retakeBean> iterator()
+   public Iterator<RetakeBean> iterator()
    {
        return retakes.iterator();
    }
 
    // ***** adders & getters //
-   public void addRetake (retakeBean qr)
+   public void addRetake (RetakeBean qr)
    {
       retakes.add (qr);
    }

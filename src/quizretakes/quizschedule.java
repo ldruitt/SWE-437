@@ -1,13 +1,16 @@
 // JO 3-Jan-2019
 package quizretakes;
 
+import quizretakes.bean.CourseBean;
+import quizretakes.bean.QuizBean;
+import quizretakes.bean.RetakeBean;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 import java.io.PrintWriter;
 import java.time.*;
-import java.lang.Long;
 import java.lang.String;
 
 import java.io.File;
@@ -25,15 +28,15 @@ import java.io.IOException;
                              Used by quizschedule.java
  *    quizzes.java -- A list of quizzes from the XML file
  *                    Used by quizschedule.java
- *    quizBean.java -- A simple quiz bean
+ *    QuizBean.java -- A simple quiz bean
  *                      Used by quizzes.java and readQuizzesXML.java
  *    retakesReader.java -- reads XML file and stores in retakes.
                              Used by quizschedule.java
  *    retakes.java -- A list of retakes from the XML file
  *                    Used by quizschedule.java
- *    retakeBean.java -- A simple retake bean
+ *    RetakeBean.java -- A simple retake bean
  *                      Used by retakes.java and readRetakesXML.java
- *    apptBean.java -- A bean to hold appointments
+ *    AppointmentBean.java -- A bean to hold appointments
 
  *    quizzes.xml -- Data file of when quizzes were given
  *    retakes.xml -- Data file of when retakes are given
@@ -84,7 +87,7 @@ protected void doGet (HttpServletRequest request, HttpServletResponse response)
    courseID = request.getParameter("courseID");
    if (courseID != null && !courseID.isEmpty())
    {  // If not, ask for one.
-      courseBean course;
+      CourseBean course;
       courseReader cr = new courseReader();
       // Filenames to be built from above and the courseID parameter
       String courseFileName = dataLocation + courseBase + "-" + courseID + ".xml";
@@ -212,7 +215,7 @@ protected void doPost (HttpServletRequest request, HttpServletResponse response)
  * @throws ServletException
  * @throws IOException
 */
-private void printQuizScheduleForm (PrintWriter out, quizzes quizList, retakes retakesList, courseBean course)
+private void printQuizScheduleForm (PrintWriter out, quizzes quizList, retakes retakesList, CourseBean course)
         throws ServletException, IOException
 {
    // Check for a week to skip
@@ -258,7 +261,7 @@ private void printQuizScheduleForm (PrintWriter out, quizzes quizList, retakes r
 
    out.println ("  <table border=1 style='background-color:#99dd99'><tr><td>"); // outer table for borders
    out.println ("  <tr><td>");
-   for(retakeBean r: retakesList)
+   for(RetakeBean r: retakesList)
    {
       LocalDate retakeDay = r.getDate();
       if (!(retakeDay.isBefore (today)) && !(retakeDay.isAfter (endDay)))
@@ -281,7 +284,7 @@ private void printQuizScheduleForm (PrintWriter out, quizzes quizList, retakes r
                       r.timeAsString() + " in " +
                       r.getLocation());
 
-         for(quizBean q: quizList)
+         for(QuizBean q: quizList)
          {
             LocalDate quizDay = q.getDate();
             LocalDate lastAvailableDay = quizDay.plusDays((long) daysAvailable);
@@ -316,7 +319,7 @@ private void printQuizScheduleForm (PrintWriter out, quizzes quizList, retakes r
    out.println ("<br/>");
    out.println ("<table border=1>");
    out.println ("<tr><td align='middle'>All quiz retake opportunities</td></tr>");
-   for(retakeBean r: retakesList)
+   for(RetakeBean r: retakesList)
    {
       out.print   ("  <tr><td>");
       out.print   (r);

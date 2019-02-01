@@ -1,6 +1,8 @@
 package quizretakes;
 
 // import java.io.Serializable; ?? Needed?
+import quizretakes.bean.QuizBean;
+
 import java.util.*;
 
 /**
@@ -9,9 +11,9 @@ import java.util.*;
  * @author Jeff Offutt
  */
 
-public class quizzes implements Iterable<quizBean>
+public class quizzes implements Iterable<QuizBean>
 {
-   private final ArrayList<quizBean> quizzes;
+   private final ArrayList<QuizBean> quizzes;
 
    // ***** Constructors //
    public quizzes ()
@@ -22,11 +24,11 @@ public class quizzes implements Iterable<quizBean>
    public quizzes (int quizID, int month, int day, int hour, int minute)
    {  // Adds one quiz to a new list
       quizzes = new ArrayList<>();
-      quizBean qb = new quizBean (quizID, month, day, hour, minute);
+      QuizBean qb = new QuizBean(quizID, month, day, hour, minute);
       quizzes.add (qb);
    }
 
-   public quizzes (quizBean qb)
+   public quizzes (QuizBean qb)
    {
       quizzes = new ArrayList<>();
       quizzes.add (qb);
@@ -39,13 +41,13 @@ public class quizzes implements Iterable<quizBean>
    }
 
    @Override
-   public Iterator<quizBean> iterator()
+   public Iterator<QuizBean> iterator()
    {
        return quizzes.iterator();
    }
 
    // ***** setters & getters //
-   public void addQuiz (quizBean qb)
+   public void addQuiz (QuizBean qb)
    {
       quizzes.add (qb);
    }

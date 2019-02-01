@@ -18,6 +18,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import quizretakes.bean.RetakeBean;
 
 // These classes read the sample XML file and manage output:
 import java.io.File;
@@ -29,7 +30,7 @@ public retakes read (String filename)
        throws IOException, ParserConfigurationException, SAXException
 {
    retakes retakeList = new retakes();
-   retakeBean retake;
+   RetakeBean retake;
 
 
    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -60,7 +61,7 @@ public retakes read (String filename)
          // minute is integer 0..59
          Integer minute = Integer.parseInt(elem.getElementsByTagName("minute").item(0).getChildNodes().item(0).getNodeValue());
          // Put one XML record into a bean and add it to the list
-         retake = new retakeBean (ID, location, month, day, hour, minute);
+         retake = new RetakeBean(ID, location, month, day, hour, minute);
          retakeList.addRetake (retake);
 
       } // end if

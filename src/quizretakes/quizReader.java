@@ -20,6 +20,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import quizretakes.bean.QuizBean;
 
 // These classes read the sample XML file and manage output:
 import java.io.File;
@@ -31,7 +32,7 @@ public quizzes read (String filename)
        throws IOException, ParserConfigurationException, SAXException
 {
    quizzes quizList = new quizzes();
-   quizBean quiz;
+   QuizBean quiz;
 
    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
    DocumentBuilder builder = factory.newDocumentBuilder();
@@ -59,7 +60,7 @@ public quizzes read (String filename)
          // minute is integer 0..59
          Integer minute = Integer.parseInt(elem.getElementsByTagName("minute").item(0).getChildNodes().item(0).getNodeValue());
          // Put one XML record into a bean and add it to the list
-         quiz = new quizBean (ID, month, day, hour, minute);
+         quiz = new QuizBean(ID, month, day, hour, minute);
          quizList.addQuiz (quiz);
       } // end if
    } // end for

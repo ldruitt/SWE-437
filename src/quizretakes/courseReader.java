@@ -20,6 +20,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import quizretakes.bean.CourseBean;
 
 // These classes read the sample XML file and manage output:
 import java.io.File;
@@ -27,10 +28,10 @@ import java.io.File;
 public class courseReader
 {
 
-public courseBean read (String filename)
+public CourseBean read (String filename)
        throws IOException, ParserConfigurationException, SAXException
 {
-   courseBean course = null;
+   CourseBean course = null;
 
 System.out.println("In course Reader, fileName: " +filename);
    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -72,7 +73,7 @@ System.out.println("course Reader, courseID: " + courseID);
          LocalDate startSkip = LocalDate.of(year, startSkipMonth, startSkipDay);
          LocalDate endSkip   = LocalDate.of(year, endSkipMonth, endSkipDay);
 
-         course = new courseBean(courseID, courseTitle, retakeDuration, startSkip, endSkip, dataLocation);
+         course = new CourseBean(courseID, courseTitle, retakeDuration, startSkip, endSkip, dataLocation);
 
       } // end if
    } // end for
