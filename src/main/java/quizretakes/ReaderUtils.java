@@ -3,6 +3,7 @@ package quizretakes;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import quizretakes.bean.*;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -159,8 +160,7 @@ public class ReaderUtils {
 		return (quizList);
 	}
 
-	private static <T> T getValue(Element host, String name) {
-		return (T) host.getElementsByTagName("hour").item(0).getChildNodes().item(0)
-				.getNodeValue();
+	private static String getValue(Element host, String name) {
+		return host.getElementsByTagName(name).item(0).getChildNodes().item(0).getNodeValue();
 	}
 }
