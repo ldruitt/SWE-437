@@ -1,9 +1,7 @@
 // JO 3-Jan-2019
 package quizretakes;
 
-import quizretakes.bean.CourseBean;
-import quizretakes.bean.QuizBean;
-import quizretakes.bean.RetakeBean;
+import quizretakes.bean.*;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -261,7 +259,7 @@ private void printQuizScheduleForm (PrintWriter out, quizzes quizList, retakes r
 
    out.println ("  <table border=1 style='background-color:#99dd99'><tr><td>"); // outer table for borders
    out.println ("  <tr><td>");
-   for(RetakeBean r: retakesList)
+   for(RetakeBean r : retakesList)
    {
       LocalDate retakeDay = r.getDate();
       if (!(retakeDay.isBefore (today)) && !(retakeDay.isAfter (endDay)))

@@ -1,5 +1,7 @@
 package quizretakes.bean;
 
+import lombok.Data;
+
 import java.time.*;
 
 /**
@@ -12,12 +14,12 @@ import java.time.*;
   <retake>
     <id>1</id> <!-- Should be unique and in order -->
     <location>Inn 204</location> --String, building & room
-    <whenOffered>
+    <date>
       <month>2</month> --01..12
       <day>7</day> --1..31
       <hour>10</hour> --0..23
       <minute>00</minute> --> 0-59
-    </whenOffered>
+    </date>
   </retake>
   <retake>
     <id>2</id>
@@ -25,56 +27,47 @@ import java.time.*;
 </retakes>
 ***************************************** */
 
-public class RetakeBean implements Comparable<RetakeBean> {
-	private final int retakeID;
+@Data public class RetakeBean implements Comparable<RetakeBean> {
+	private final int ID;
 	private final String location;
-	private final LocalDate whenOffered;
-	private final LocalTime timeOffered;
+	private final LocalDate date;
+	private final LocalTime time;
 
 	public RetakeBean(int ID, String location, int month, int day, int hour, int minute) {
-		retakeID = ID;
+		this.ID = ID;
 		this.location = location;
 		int year = Year.now().getValue();
-		whenOffered = LocalDate.of(year, month, day);
-		timeOffered = LocalTime.of(hour, minute);
+		date = LocalDate.of(year, month, day);
+		time = LocalTime.of(hour, minute);
 	}
 
 	@Override
 	public int compareTo(RetakeBean quizR) {
-		return this.retakeID - quizR.retakeID;
+		return this.ID - quizR.ID;
 	}
 
-	public LocalDate getDate() {
-		return whenOffered;
-	}
-	public String getLocation() {
-		return location;
-	}
-	public int getID() {
-		return retakeID;
-	}
-
+	@Override
 	public String toString() {
-		return retakeID + ": " + location + ": " + whenOffered.toString() + ": " + whenOffered
-                .getDayOfWeek() + ": " + timeOffered.toString();
+		return ID + ": " + location + ": " + date.toString() + ": " + date
+                .getDayOfWeek() + ": " + time.toString();
 	}
 
 	// Date methods
 	public Month getMonth() {
-		return whenOffered.getMonth();
+		return date.getMonth();
 	}
 	public int getMonthNum() {
-		return whenOffered.getMonthValue();
+		return date.getMonthValue();
 	}
 	public DayOfWeek getDayOfWeek() {
-		return whenOffered.getDayOfWeek();
+		return date.getDayOfWeek();
 	}
 	public String dateAsString() {
-		return whenOffered.toString();
+		return date.toString();
 	}
 
 	// Time methods
 	public String timeAsString() {
-		return timeOffered.toString();
+		return time.toString();
 	}
 }

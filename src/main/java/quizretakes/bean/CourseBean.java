@@ -2,6 +2,8 @@
 // Stores course information in a bean
 package quizretakes.bean;
 
+import lombok.Data;
+
 import java.time.*;
 
 /**
@@ -22,7 +24,7 @@ import java.time.*;
 </course>
 ***************************************** */
 
-public class CourseBean {
+@Data public class CourseBean {
 	private String courseID;
 	private String courseTitle;
 	private String retakeDuration;
@@ -37,44 +39,6 @@ public class CourseBean {
 		this.retakeDuration = retakeDuration;
 		this.startSkip = startSkip;
 		this.endSkip = endSkip;
-		this.dataLocation = dataLocation;
-	}
-
-	public String getCourseID() {
-		return courseID;
-	}
-	public String getCourseTitle() {
-		return courseTitle;
-	}
-	public String getRetakeDuration() {
-		return retakeDuration;
-	}
-	public LocalDate getStartSkip() {
-		return startSkip;
-	}
-	public LocalDate getEndSkip() {
-		return endSkip;
-	}
-	public String getDataLocation() {
-		return dataLocation;
-	}
-
-	public void setCourseID(String courseID) {
-		this.courseID = courseID;
-	}
-	public void setCourseTitle(String courseTitle) {
-		this.courseTitle = courseTitle;
-	}
-	public void setRetakeDuration(String retakeDuration) {
-		this.retakeDuration = retakeDuration;
-	}
-	public void setStartSkip(LocalDate startSkip) {
-		this.startSkip = startSkip;
-	}
-	public void setEndSkip(LocalDate endSkip) {
-		this.endSkip = endSkip;
-	}
-	public void setDataLocation(String dataLocation) {
 		this.dataLocation = dataLocation;
 	}
 }

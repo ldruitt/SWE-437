@@ -3,6 +3,10 @@
 	<groupId>me.coley</groupId>
 	<version>1.0.0</version>
 	<artifactId>quizretakes</artifactId>
+	<!-- variables -->
+	<properties>
+		<lombok.version>1.18.4</lombok.version>
+	</properties>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
 		<dependency>
@@ -15,26 +19,34 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.4</version>
+			<version>${lombok.version}</version>
+			<!-- Not to be included in export -->
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<build>
-		<sourceDirectory>src</sourceDirectory>
+		<sourceDirectory>src/main/java</sourceDirectory>
 		<resources>
 			<resource>
-				<directory>src</directory>
+				<directory>src/main/java</directory>
 				<includes>
 					<include>*.xml</include>
 				</includes>
 			</resource>
 		</resources>
-		<plugins>		
+		<plugins>
 			<!-- Compiler version -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.0</version>
 				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+					</annotationProcessorPaths>
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>

@@ -1,5 +1,7 @@
 package quizretakes.bean;
 
+import lombok.Data;
+
 import java.time.*;
 
 /**
@@ -11,12 +13,12 @@ import java.time.*;
 <quizzes>
   <quiz>
     <id>1</id> --integer > 0
-    <dateGiven>
+    <date>
       <month>1</month> --01..12
       <day>10</day> --1..31
       <hour>15</hour> --0..23
       <minute>30</minute> --> 0-59
-    </dateGiven>
+    </date>
   </quiz>
   <quiz>
     <id>2</id>
@@ -24,16 +26,16 @@ import java.time.*;
 </quizzes>
 ***************************************** */
 
-public class QuizBean implements Comparable<QuizBean> {
+@Data public class QuizBean implements Comparable<QuizBean> {
 	private final int ID;
-	private final LocalDate dateGiven;
-	private final LocalTime timeGiven;
+	private final LocalDate date;
+	private final LocalTime time;
 
 	public QuizBean(int quizID, int month, int day, int hour, int minute) {
 		ID = quizID;
 		int year = Year.now().getValue();
-		dateGiven = LocalDate.of(year, month, day);
-		timeGiven = LocalTime.of(hour, minute);
+		date = LocalDate.of(year, month, day);
+		time = LocalTime.of(hour, minute);
 	}
 
 	@Override
@@ -41,33 +43,28 @@ public class QuizBean implements Comparable<QuizBean> {
 		return this.ID - quizB.ID;
 	}
 
-	public LocalDate getDate() {
-		return dateGiven;
-	}
-	public int getID() {
-		return ID;
-	}
+	@Override
 	public String toString() {
-		return ID + ": " + dateGiven.toString() + ": " + dateGiven.getDayOfWeek() + ": " +
-                timeGiven.toString();
+		return ID + ": " + date.toString() + ": " + date.getDayOfWeek() + ": " +
+                time.toString();
 	}
 
 	// Date methods
 	public Month getMonth() {
-		return dateGiven.getMonth();
+		return date.getMonth();
 	}
 	public int getMonthNum() {
-		return dateGiven.getMonthValue();
+		return date.getMonthValue();
 	}
 	public DayOfWeek getDayOfWeek() {
-		return dateGiven.getDayOfWeek();
+		return date.getDayOfWeek();
 	}
 	public String dateAsString() {
-		return dateGiven.toString();
+		return date.toString();
 	}
 
 	// Time methods
 	public String timeAsString() {
-		return timeGiven.toString();
+		return time.toString();
 	}
 }

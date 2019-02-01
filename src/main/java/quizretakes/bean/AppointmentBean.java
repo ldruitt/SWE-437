@@ -1,12 +1,14 @@
 package quizretakes.bean;
 
+import lombok.Data;
+
 /**
  * This bean holds a single quiz retake appointment
  *
  * @author Jeff Offutt
  */
 
-public class AppointmentBean {
+@Data public class AppointmentBean {
 	private final int quizID;
 	private final int retakeID;
 	private final String name;
@@ -17,19 +19,7 @@ public class AppointmentBean {
 		this.name = name;
 	}
 
-	// *** Getters *** //
-	public int getQuizID() {
-		return quizID;
-	}
-
-	public int getRetakeID() {
-		return retakeID;
-	}
-
-	public String getName() {
-		return name;
-	}
-
+	@Override
 	public String toString() {
 		return retakeID + ":" + quizID + ":" + name;
 	}
