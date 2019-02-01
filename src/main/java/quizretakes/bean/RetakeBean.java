@@ -27,7 +27,8 @@ import java.time.*;
 </retakes>
 ***************************************** */
 
-@Data public class RetakeBean implements Comparable<RetakeBean> {
+@Data
+public class RetakeBean implements Comparable<RetakeBean> {
 	private final int ID;
 	private final String location;
 	private final LocalDate date;
@@ -48,20 +49,23 @@ import java.time.*;
 
 	@Override
 	public String toString() {
-		return ID + ": " + location + ": " + date.toString() + ": " + date
-                .getDayOfWeek() + ": " + time.toString();
+		return ID + ": " + location + ": " + date.toString() + ": " + date.getDayOfWeek() + ": " +
+				time.toString();
 	}
 
 	// Date methods
 	public Month getMonth() {
 		return date.getMonth();
 	}
+
 	public int getMonthNum() {
 		return date.getMonthValue();
 	}
+
 	public DayOfWeek getDayOfWeek() {
 		return date.getDayOfWeek();
 	}
+
 	public String dateAsString() {
 		return date.toString();
 	}

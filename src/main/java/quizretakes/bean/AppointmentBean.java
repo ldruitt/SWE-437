@@ -8,7 +8,8 @@ import lombok.Data;
  * @author Jeff Offutt
  */
 
-@Data public class AppointmentBean {
+@Data
+public class AppointmentBean {
 	private final int quizID;
 	private final int retakeID;
 	private final String name;

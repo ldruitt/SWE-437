@@ -24,7 +24,8 @@ import java.time.*;
 </course>
 ***************************************** */
 
-@Data public class CourseBean {
+@Data
+public class CourseBean {
 	private String courseID;
 	private String courseTitle;
 	private String retakeDuration;

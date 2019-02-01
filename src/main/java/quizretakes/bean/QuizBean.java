@@ -26,7 +26,8 @@ import java.time.*;
 </quizzes>
 ***************************************** */
 
-@Data public class QuizBean implements Comparable<QuizBean> {
+@Data
+public class QuizBean implements Comparable<QuizBean> {
 	private final int ID;
 	private final LocalDate date;
 	private final LocalTime time;
@@ -45,20 +46,22 @@ import java.time.*;
 
 	@Override
 	public String toString() {
-		return ID + ": " + date.toString() + ": " + date.getDayOfWeek() + ": " +
-                time.toString();
+		return ID + ": " + date.toString() + ": " + date.getDayOfWeek() + ": " + time.toString();
 	}
 
 	// Date methods
 	public Month getMonth() {
 		return date.getMonth();
 	}
+
 	public int getMonthNum() {
 		return date.getMonthValue();
 	}
+
 	public DayOfWeek getDayOfWeek() {
 		return date.getDayOfWeek();
 	}
+
 	public String dateAsString() {
 		return date.toString();
 	}
