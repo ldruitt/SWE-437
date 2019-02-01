@@ -1,0 +1,13 @@
+.metadata/**
+.recommenders/**
+.settings/**
+target/**
+
+
+.classpath
+.project
+
+# IntelliJ IDEA Project stuff
+.idea/
+*.iws
+*.iml
