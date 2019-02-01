@@ -11,20 +11,16 @@ import java.util.*;
  */
 
 public class retakes implements Iterable<RetakeBean> {
-	private final List<RetakeBean> retakes;
+	private final List<RetakeBean> retakes = new ArrayList<>();
 
-	public retakes() {
-		retakes = new ArrayList<>();
-	}
+	public retakes() {}
 
 	public retakes(int ID, String location, int month, int day, int hour, int minute) {
-		retakes = new ArrayList<>();
 		RetakeBean qr = new RetakeBean(ID, location, month, day, hour, minute);
 		retakes.add(qr);
 	}
 
 	public retakes(RetakeBean qr) {
-		retakes = new ArrayList<>();
 		retakes.add(qr);
 	}
 

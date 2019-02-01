@@ -6,7 +6,6 @@ import quizretakes.bean.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
 import java.io.PrintWriter;
 import java.time.*;
 import java.lang.String;
@@ -88,7 +87,7 @@ public class quizschedule extends HttpServlet {
 			// Filenames to be built from above and the courseID parameter
 			String courseFileName = dataLocation + courseBase + "-" + courseID + ".xml";
 			try {
-				course = courseReader.read(courseFileName);
+				course = ReaderUtils.course(courseFileName);
 			} catch(Exception e) {
 				String message = "<p>Can't find the data files for course ID " + courseID + ". " +
 						"You" + " can try again.";
@@ -108,8 +107,8 @@ public class quizschedule extends HttpServlet {
 			retakes retakesList;
 
 			try { // Read the files and print the form
-				quizList = quizReader.read(quizzesFileName);
-				retakesList = retakesReader.read(retakesFileName);
+				quizList = ReaderUtils.quizzes(quizzesFileName);
+				retakesList = ReaderUtils.retakes(retakesFileName);
 				printQuizScheduleForm(out, quizList, retakesList, course);
 			} catch(Exception e) {
 				String message = "<p>Can't find the data files for course ID " + courseID + ". " +
