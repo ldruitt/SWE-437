@@ -15,11 +15,6 @@ public class Retakes implements Iterable<RetakeBean> {
 
 	public Retakes() {}
 
-	public Retakes(int ID, String location, int month, int day, int hour, int minute) {
-		RetakeBean qr = new RetakeBean(ID, location, month, day, hour, minute);
-		addRetake(qr);
-	}
-
 	public Retakes(RetakeBean qr) {
 		retakes.add(qr);
 	}

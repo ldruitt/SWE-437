@@ -17,11 +17,6 @@ public class Quizzes implements Iterable<QuizBean> {
 
 	public Quizzes(){}
 
-	public Quizzes(int quizID, int month, int day, int hour, int minute) {
-		QuizBean qb = new QuizBean(quizID, month, day, hour, minute);
-		addQuiz(qb);
-	}
-
 	public Quizzes(QuizBean qb) {
 		quizzes.add(qb);
 	}
