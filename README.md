@@ -2,6 +2,11 @@
 
 The first assignment for [SWE-437](https://cs.gmu.edu/~offutt/classes/437/index.html) on Software Evolution. 
 
+## Requirements
+
+* [Maven](https://maven.apache.org/) - Compilation
+* [Java 8](https://openjdk.java.net/projects/jdk8/) - JavaFX
+
 ## Maintainability 
 
 The following pros & cons pertain to the _initial state_ of the software. Some of the original files were excluded from the initial commit (`Makefile`/`deploy`), but may be found in the [original assignment zip](original.zip).
