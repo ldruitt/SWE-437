@@ -2,7 +2,7 @@
 
 The first assignment for [SWE-437](https://cs.gmu.edu/~offutt/classes/437/index.html) on Software Evolution. 
 
-### Maintainability 
+## Maintainability 
 
 The following pros & cons pertain to the _initial state_ of the software. Some of the original files were excluded from the initial commit (`Makefile`/`deploy`), but may be found in the [original assignment zip](original.zip).
 
@@ -20,6 +20,6 @@ The following pros & cons pertain to the _initial state_ of the software. Some o
     * `deploy` specified system-dependent paths & required setting up [additional software](https://piazza.com/class/jqwfp37y1ap78x?cid=30) to test
 * Source code format did not follow [guidelines](https://www.oracle.com/technetwork/java/javase/documentation/codeconvtoc-136057.html) consistently between classes
 
-### Documentation log
+## Documentation log
 
 * TODO: Summarize git history
