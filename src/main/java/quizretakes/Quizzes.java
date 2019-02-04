@@ -17,10 +17,6 @@ public class Quizzes implements Iterable<QuizBean> {
 
 	public Quizzes(){}
 
-	public Quizzes(QuizBean qb) {
-		quizzes.add(qb);
-	}
-
 	public void sort() {
 		Collections.sort(quizzes);
 	}

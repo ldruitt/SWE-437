@@ -15,10 +15,6 @@ public class Retakes implements Iterable<RetakeBean> {
 
 	public Retakes() {}
 
-	public Retakes(RetakeBean qr) {
-		retakes.add(qr);
-	}
-
 	public void sort() {
 		Collections.sort(retakes);
 	}
