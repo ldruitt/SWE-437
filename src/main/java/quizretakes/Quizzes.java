@@ -1,7 +1,5 @@
 package quizretakes;
 
-// import java.io.Serializable; ?? Needed?
-
 import quizretakes.bean.QuizBean;
 
 import java.util.*;

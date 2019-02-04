@@ -1,4 +1,3 @@
-// JO 3-Jan-2019
 package quizretakes;
 
 import quizretakes.bean.*;
