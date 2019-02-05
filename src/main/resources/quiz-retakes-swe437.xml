@@ -14,7 +14,7 @@
 
   <retake>
     <id>2</id>
-    <location>???</location> <!-- TA's office hours -->
+    <location>EB 4444</location> <!-- TA's office hours -->
     <dateGiven> <!-- Same format as in quizzes.xml -->
       <month>2</month> <!-- 01..12 -->
       <day>5</day> <!-- 1..31 -->
