@@ -3,7 +3,7 @@
 .settings/**
 target/**
 
-
+*.txt
 .classpath
 .project
 
