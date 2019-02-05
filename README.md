@@ -2,6 +2,8 @@
 
 The first assignment for [SWE-437](https://cs.gmu.edu/~offutt/classes/437/index.html) on Software Evolution. 
 
+![preview](preview.gif)
+
 ## Requirements
 
 * [Maven](https://maven.apache.org/) - Compilation
