@@ -1,8 +1,10 @@
 package quizretakes;
 
+import quizretakes.bean.QuizBean;
 import quizretakes.bean.RetakeBean;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * This class holds a collection of retakes
@@ -17,6 +19,10 @@ public class Retakes implements Iterable<RetakeBean> {
 
 	public void sort() {
 		Collections.sort(retakes);
+	}
+
+	public Stream<RetakeBean> stream() {
+		return retakes.stream();
 	}
 
 	@Override

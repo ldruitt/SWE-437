@@ -3,6 +3,7 @@ package quizretakes;
 import quizretakes.bean.QuizBean;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * This class holds a collection of quizzes
@@ -17,6 +18,10 @@ public class Quizzes implements Iterable<QuizBean> {
 
 	public void sort() {
 		Collections.sort(quizzes);
+	}
+
+	public Stream<QuizBean> stream() {
+		return quizzes.stream();
 	}
 
 	@Override

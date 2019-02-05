@@ -17,11 +17,9 @@ import java.io.IOException;
 /**
  * @author Jeff Offutt
  * Date: January, 2019
- *
  * quizzes.xml -- Data file of when quizzes were given
  * retakes.xml -- Data file of when retakes are given
  */
-
 public class QuizSchedule extends HttpServlet {
 	// Data files
 	// location maps to /webapps/offutt/WEB-INF/data/ from a terminal window.
@@ -38,7 +36,6 @@ public class QuizSchedule extends HttpServlet {
 	// Stored in course.xml file, default 14
 	// Number of days a retake is offered after the quiz is given
 	private int daysAvailable = 14;
-
 	// To be set by getRequestURL()
 	private String thisServlet = "";
 
@@ -54,56 +51,8 @@ public class QuizSchedule extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
 			IOException {
-		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
-		ServletUtils.printHeader(out);
-
-		// Whoami? (Used in form)
-		thisServlet = (request.getRequestURL()).toString();
-		// CS server has a flaw--requires https & 8443, but puts http & 8080 on the requestURL
-		thisServlet = thisServlet.replace("http", "https");
-		thisServlet = thisServlet.replace("8080", "8443");
-
-		// CourseID must be a parameter (also in course XML file, but we need to know which course
-		// XML file ...)
-		courseID = request.getParameter("courseID");
-		if(courseID != null && !courseID.isEmpty()) {  // If not, ask for one.
-			CourseBean course;
-			// Filenames to be built from above and the courseID parameter
-			String courseFileName = dataLocation + courseBase + "-" + courseID + ".xml";
-			try {
-				course = ReaderUtils.course(courseFileName);
-			} catch(Exception e) {
-				String message = "<p>Can't find the data files for course ID " + courseID + ". " +
-						"You" + " can try again.";
-				ServletUtils.printNeedCourseID(out, thisServlet, message);
-				ServletUtils.printFooter(out);
-				return;
-			}
-			daysAvailable = Integer.parseInt(course.getRetakeDuration());
-
-			// Filenames to be built from above and the courseID
-			String quizzesFileName = dataLocation + quizzesBase + "-" + courseID + ".xml";
-			String retakesFileName = dataLocation + retakesBase + "-" + courseID + ".xml";
-			String apptsFileName = dataLocation + apptsBase + "-" + courseID + ".txt";
-
-			// Load the quizzes and the retake times from disk
-			Quizzes quizList;
-			Retakes retakesList;
-
-			try { // Read the files and print the form
-				quizList = ReaderUtils.quizzes(quizzesFileName);
-				retakesList = ReaderUtils.retakes(retakesFileName);
-				printQuizScheduleForm(out, quizList, retakesList, course);
-			} catch(Exception e) {
-				String message = "<p>Can't find the data files for course ID " + courseID + ". " +
-						"You" + " can try again.";
-				ServletUtils.printNeedCourseID(out, thisServlet, message);
-			}
-		} else {
-			ServletUtils.printNeedCourseID(out, thisServlet, "");
-		}
-		ServletUtils.printFooter(out);
+		// Removed due to re-implementation in JavaFX ui
+		// - Other methods will be removed once they are fully supported as well
 	}
 
 	/**
@@ -196,6 +145,11 @@ public class QuizSchedule extends HttpServlet {
 	 * @param out
 	 * 		PrintWriter
 	 */
+	// Text: student-name
+	// ????: checkbox 'retakeReqs'
+	//           value = r.getID() + "," + q.getID()
+	//           id    = "q" + q.getID() + "r" + r.getID()
+	//
 	private void printQuizScheduleForm(PrintWriter out, Quizzes quizList, Retakes retakesList,
 									   CourseBean course) {
 		// Check for a week to skip
@@ -218,7 +172,7 @@ public class QuizSchedule extends HttpServlet {
 		out.print("  <p>You can sign up for quiz retakes within the next two weeks. ");
 		out.print("Enter your name (as it appears on the class roster), ");
 		out.println("then select which date, time, and quiz you wish to retake from the following " +
-				"" + "" + "" + "list.");
+				"" + "" + "" + "" + "list.");
 		out.println("  <br/>");
 
 		LocalDate today = LocalDate.now();
@@ -238,6 +192,9 @@ public class QuizSchedule extends HttpServlet {
 		out.println((endDay.getDayOfWeek()) + ", " + endDay.getMonth() + " " + endDay
 				.getDayOfMonth());
 		out.println("  <br/>");
+
+
+
 
 		out.print("  <p>Name: ");
 		out.println("  <input type='text' id='studentName' name='studentName' size='50' />");
@@ -283,9 +240,7 @@ public class QuizSchedule extends HttpServlet {
 								.getDayOfWeek() + ", " + quizDay.getMonth() + " " + quizDay
 								.getDayOfMonth() + ":</label> ");
 						// Value is "retakeID:quiziD"
-						out.println("    <td><input type='checkbox' name='retakeReqs'  value='" +
-								r.getID() + separator + q.getID() + "' id='q" + q.getID() + "r" +
-								r.getID() + "'>");
+						out.println("    <td><input type='checkbox' name='retakeReqs'  value='" + r.getID() + separator + q.getID() + "' id='q" + q.getID() + "r" + 	r.getID() + "'>");
 					}
 				}
 			}
@@ -315,4 +270,4 @@ public class QuizSchedule extends HttpServlet {
 		out.println("</table>");
 	}
 
-} // end quizschedule class
+}

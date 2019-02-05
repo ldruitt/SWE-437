@@ -13,35 +13,97 @@ import java.time.Year;
 import java.util.*;
 import java.io.*;
 
+/**
+ * Course XML data utilities.
+ */
 public class ReaderUtils {
+	/**
+	 * Document parsing factory.
+	 */
 	private static final DocumentBuilderFactory FACTORY = DocumentBuilderFactory.newInstance();
+	/**
+	 * Separator used for appointment information.
+	 */
 	private static final String SEPARATOR = ",";
 
-	public static List<AppointmentBean> appointments(String filename) throws IOException {
+	/**
+	 * Read all information of a given course.
+	 * <ul>
+	 * <li>Couse summary</li>
+	 * <li>Quizzes</li>
+	 * <li>Quiz retakes</li>
+	 * <li>Retake appointments</li>
+	 * </ul>
+	 *
+	 * @param courseID
+	 * 		Course to read data of.
+	 *
+	 * @return Wrapper of course data.  {@code null} if the course files could not be located.
+	 */
+	public static BeanWrapper load(String courseID) {
+		// File name constants
+		String baseCourse = "course";
+		String baseQuizzes = "quiz-orig";
+		String baseRetakes = "quiz-retakes";
+		String baseAppts = "quiz-appts";
+
+		// Load the course info
+		CourseBean course;
+		String courseFileName = baseCourse + "-" + courseID + ".xml";
+		try {
+			course = ReaderUtils.course(courseFileName);
+		} catch(Exception ex) {
+			return null;
+		}
+
+		// Filenames to be built from above and the courseID
+		String quizzesFileName = baseQuizzes + "-" + courseID + ".xml";
+		String retakesFileName = baseRetakes + "-" + courseID + ".xml";
+		String apptsFileName = baseAppts + "-" + courseID + ".txt";
+
+		// Load the quizzes, retakes, and current appointments
+		Quizzes quizList;
+		Retakes retakesList;
+		List<AppointmentBean> appointments;
+
+		try {
+			// Read the files and put in wrapper bean
+			quizList = ReaderUtils.quizzes(quizzesFileName);
+			retakesList = ReaderUtils.retakes(retakesFileName);
+			appointments = ReaderUtils.appointments(apptsFileName);
+			return new BeanWrapper(course, quizList, retakesList, appointments);
+		} catch(Exception ex) {
+			return null;
+		}
+	}
+
+	private static List<AppointmentBean> appointments(String filename) throws IOException {
 		List<AppointmentBean> appts = new ArrayList<>();
 		File file = new File(filename);
 		if(!file.exists()) {
-			throw new IOException("No appointments to read.");
+			System.out.println("No appointments file to read from!");
+			file.createNewFile();
 		} else {
 			FileReader fw = new FileReader(file.getAbsoluteFile());
 			BufferedReader bw = new BufferedReader(fw);
 			String line;
 			while((line = bw.readLine()) != null) {
 				String[] s = line.split(SEPARATOR);
-				appts.add(new AppointmentBean(Integer.parseInt(s[0]), Integer.parseInt(s[1]), s[2]));
+				appts.add(new AppointmentBean(Integer.parseInt(s[0]), Integer.parseInt(s[1]),
+						s[2]));
 			}
 			bw.close();
 		}
-		return (appts);
+		return appts;
 	}
 
-	public static Retakes retakes(String filename) throws IOException,
+	private static Retakes retakes(String filename) throws IOException,
 			ParserConfigurationException, SAXException {
 		Retakes retakeList = new Retakes();
 		RetakeBean retake;
 
 		DocumentBuilder builder = FACTORY.newDocumentBuilder();
-		Document document = builder.parse(ReaderUtils.class.getResourceAsStream("/" +filename));
+		Document document = builder.parse(ReaderUtils.class.getResourceAsStream("/" + filename));
 
 		// Get all the nodes
 		NodeList nodeList = document.getDocumentElement().getChildNodes();
@@ -74,12 +136,12 @@ public class ReaderUtils {
 		return (retakeList);
 	}
 
-	public static CourseBean course(String filename) throws IOException,
+	private static CourseBean course(String filename) throws IOException,
 			ParserConfigurationException, SAXException {
 		CourseBean course = null;
 
 		DocumentBuilder builder = FACTORY.newDocumentBuilder();
-		Document document = builder.parse(ReaderUtils.class.getResourceAsStream("/" +filename));
+		Document document = builder.parse(ReaderUtils.class.getResourceAsStream("/" + filename));
 
 		// Get all the nodes
 		NodeList nodeList = document.getDocumentElement().getChildNodes();
@@ -114,12 +176,12 @@ public class ReaderUtils {
 		return (course);
 	}
 
-	public static Quizzes quizzes(String filename) throws IOException,
+	private static Quizzes quizzes(String filename) throws IOException,
 			ParserConfigurationException, SAXException {
 		Quizzes quizList = new Quizzes();
 
 		DocumentBuilder builder = FACTORY.newDocumentBuilder();
-		Document document = builder.parse(ReaderUtils.class.getResourceAsStream("/" +filename));
+		Document document = builder.parse(ReaderUtils.class.getResourceAsStream("/" + filename));
 
 		// Get all the nodes
 		NodeList nodeList = document.getDocumentElement().getChildNodes();
@@ -148,7 +210,7 @@ public class ReaderUtils {
 		quizList.sort();
 		return (quizList);
 	}
-
+	
 	private static String getValue(Element host, String name) {
 		return host.getElementsByTagName(name).item(0).getChildNodes().item(0).getNodeValue();
 	}
