@@ -31,15 +31,13 @@ public class CourseBean {
 	private String retakeDuration;
 	private LocalDate startSkip;
 	private LocalDate endSkip;
-	private String dataLocation;
 
 	public CourseBean(String courseID, String courseTitle, String retakeDuration, LocalDate
-			startSkip, LocalDate endSkip, String dataLocation) {
+			startSkip, LocalDate endSkip) {
 		this.courseID = courseID;
 		this.courseTitle = courseTitle;
 		this.retakeDuration = retakeDuration;
 		this.startSkip = startSkip;
 		this.endSkip = endSkip;
-		this.dataLocation = dataLocation;
 	}
 }
