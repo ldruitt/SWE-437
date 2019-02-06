@@ -7,11 +7,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextAlignment;
 import quizretakes.bean.BeanWrapper;
+import quizretakes.bean.QuizBean;
 import quizretakes.bean.RetakeBean;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class WeekView extends GridPane {
 	// Time formats
@@ -38,6 +40,7 @@ public class WeekView extends GridPane {
 	private static final LocalTime timeEnd = LocalTime.of(19, 0);
 
 	public WeekView(BeanWrapper wrap) {
+		// TODO: Allow user to tab to the next week
 		LocalDate today = LocalDate.now();
 		LocalDate weekStart = today.minusDays(today.getDayOfWeek().getValue() - 1);
 		LocalDate weekEnd = weekStart.plusDays(6);
@@ -64,17 +67,17 @@ public class WeekView extends GridPane {
 			for(LocalDateTime time = date.atTime(timeStart); !time.isAfter(date.atTime(timeEnd));
 				time = time.plus(SLOT_LEN)) {
 				// Create the slot
-				RetakeSlot slot = new RetakeSlot(time);
+				QuizSlot slot = new QuizSlot(time);
 				Node view = slot.getView();
 				add(view, slot.getTime().getDayOfWeek().getValue(), row);
 				row++;
 				// Find matching quizzes at the given time. Apply to the slot if found.
 				// Final to allow stream access to non-final variable "time".
 				final LocalDateTime timeAlias = time;
-				Optional<RetakeBean> retakeFound = wrap.getRetakes().stream().filter(q -> match(q,
-						timeAlias)).findAny();
-				if(retakeFound.isPresent()) {
-					slot.setRetake(retakeFound.get());
+				Optional<QuizBean> quizFound = Stream.concat(wrap.getQuizzes().stream(), wrap
+						.getRetakes().stream()).filter(q -> match(q, timeAlias)).findAny();
+				if(quizFound.isPresent()) {
+					slot.setQuiz(quizFound.get());
 					registerEvents(slot);
 				}
 			}
@@ -82,19 +85,19 @@ public class WeekView extends GridPane {
 	}
 
 	/**
-	 * Check if the given time matches the time the retake quiz is available.
+	 * Check if the given time matches the time the quiz is at.
 	 *
-	 * @param retake
-	 * 		The quiz to retake.
+	 * @param quiz
+	 * 		The quiz instance.
 	 * @param time
 	 * 		An arbitrary time.
 	 *
 	 * @return {@code true} if the quiz time matches the given time. {@code false} otherwise.
 	 */
-	private static boolean match(RetakeBean retake, LocalDateTime time) {
+	private static boolean match(QuizBean quiz, LocalDateTime time) {
 		// Thankfully the time API implements equals in such a way that this works.
 		// The time specified in XML must be in a duration as specified by the constant above.
-		LocalDateTime quizTime = retake.getDate().atTime(retake.getTime());
+		LocalDateTime quizTime = quiz.getDate().atTime(quiz.getTime());
 		return quizTime.equals(time);
 	}
 
@@ -104,7 +107,7 @@ public class WeekView extends GridPane {
 	 * @param slot
 	 * 		The timeslot to register.
 	 */
-	private static void registerEvents(RetakeSlot slot) {
+	private static void registerEvents(QuizSlot slot) {
 		// TODO: On-click:
 		// - confirm they meant this class
 		// - prompt name

@@ -1,6 +1,7 @@
 package quizretakes.bean;
 
 import lombok.Data;
+import lombok.ToString;
 
 import java.time.*;
 
@@ -28,50 +29,12 @@ import java.time.*;
 ***************************************** */
 
 @Data
-public class RetakeBean implements Comparable<RetakeBean> {
-	private final int ID;
+@ToString(callSuper=true)
+public class RetakeBean extends QuizBean {
 	private final String location;
-	private final LocalDate date;
-	private final LocalTime time;
 
 	public RetakeBean(int ID, String location, int month, int day, int hour, int minute) {
-		this.ID = ID;
+		super(ID, month, day, hour, minute);
 		this.location = location;
-		int year = Year.now().getValue();
-		date = LocalDate.of(year, month, day);
-		time = LocalTime.of(hour, minute);
-	}
-
-	@Override
-	public int compareTo(RetakeBean quizR) {
-		return this.ID - quizR.ID;
-	}
-
-	@Override
-	public String toString() {
-		return ID + ": " + location + ": " + date.toString() + ": " + date.getDayOfWeek() + ": " +
-				time.toString();
-	}
-
-	// Date methods
-	public Month getMonth() {
-		return date.getMonth();
-	}
-
-	public int getMonthNum() {
-		return date.getMonthValue();
-	}
-
-	public DayOfWeek getDayOfWeek() {
-		return date.getDayOfWeek();
-	}
-
-	public String dateAsString() {
-		return date.toString();
-	}
-
-	// Time methods
-	public String timeAsString() {
-		return time.toString();
 	}
 }

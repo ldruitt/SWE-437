@@ -210,7 +210,7 @@ public class ReaderUtils {
 		quizList.sort();
 		return (quizList);
 	}
-	
+
 	private static String getValue(Element host, String name) {
 		return host.getElementsByTagName(name).item(0).getChildNodes().item(0).getNodeValue();
 	}
