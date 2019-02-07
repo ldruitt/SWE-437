@@ -28,11 +28,11 @@ import java.time.*;
 public class CourseBean {
 	private String courseID;
 	private String courseTitle;
-	private String retakeDuration;
+	private int retakeDuration;
 	private LocalDate startSkip;
 	private LocalDate endSkip;
 
-	public CourseBean(String courseID, String courseTitle, String retakeDuration, LocalDate
+	public CourseBean(String courseID, String courseTitle, int retakeDuration, LocalDate
 			startSkip, LocalDate endSkip) {
 		this.courseID = courseID;
 		this.courseTitle = courseTitle;

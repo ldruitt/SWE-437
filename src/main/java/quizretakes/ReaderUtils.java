@@ -40,7 +40,7 @@ public class ReaderUtils {
 	 *
 	 * @return Wrapper of course data.  {@code null} if the course files could not be located.
 	 */
-	public static BeanWrapper load(String courseID) {
+	public static DataWrapper load(String courseID) {
 		// File name constants
 		String baseCourse = "course";
 		String baseQuizzes = "quiz-orig";
@@ -71,7 +71,7 @@ public class ReaderUtils {
 			quizList = ReaderUtils.quizzes(quizzesFileName);
 			retakesList = ReaderUtils.retakes(retakesFileName);
 			appointments = ReaderUtils.appointments(apptsFileName);
-			return new BeanWrapper(course, quizList, retakesList, appointments);
+			return new DataWrapper(course, quizList, retakesList, appointments);
 		} catch(Exception ex) {
 			return null;
 		}
@@ -155,8 +155,7 @@ public class ReaderUtils {
 				// quiz IDs should be unique
 				String courseID = getValue(elem, "courseID");
 				String courseTitle = getValue(elem, "courseTitle");
-				String retakeDuration = getValue(elem, "retakeDuration");
-
+				int retakeDuration = Integer.parseInt(getValue(elem, "retakeDuration"));
 				// startSkipMonth is an integer 1..12
 				int startSkipMonth = Integer.parseInt(getValue(elem, "startSkipMonth"));
 				// startSkipDay is integer 1..31

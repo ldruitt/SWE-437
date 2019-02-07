@@ -1,9 +1,8 @@
 package quizretakes.bean;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.time.*;
 
 /**
  * This bean holds information about a quiz retake session
@@ -29,7 +28,8 @@ import java.time.*;
 ***************************************** */
 
 @Data
-@ToString(callSuper=true)
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class RetakeBean extends QuizBean {
 	private final String location;
 

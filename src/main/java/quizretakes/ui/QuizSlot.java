@@ -1,17 +1,31 @@
 package quizretakes.ui;
 
+import java.time.LocalDateTime;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import lombok.Data;
 import quizretakes.bean.QuizBean;
 import quizretakes.bean.RetakeBean;
+import lombok.Data;
 
-import java.time.LocalDateTime;
-
+/**
+ * Representation of a quiz or retake that can be displayed as a slot in the WeekView.
+ *
+ * @author Matt Coley
+ */
 @Data
 public class QuizSlot {
+	/**
+	 * Time of the quiz/retake.
+	 */
 	private final LocalDateTime time;
+	/**
+	 * Holds the node representation of the quiz/retake.
+	 */
 	private final StackPane view;
+	/**
+	 * The quiz/retake this slot represents. <br>
+	 * <b>Note:</b> Retake extends Quiz.
+	 */
 	private QuizBean quiz;
 
 	public QuizSlot(LocalDateTime time) {

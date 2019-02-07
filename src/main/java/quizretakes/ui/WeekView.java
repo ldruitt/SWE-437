@@ -1,21 +1,25 @@
 package quizretakes.ui;
 
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.TextAlignment;
-import quizretakes.bean.BeanWrapper;
-import quizretakes.bean.QuizBean;
-import quizretakes.bean.RetakeBean;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.stream.Stream;
+import javafx.geometry.*;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.text.TextAlignment;
+import quizretakes.DataWrapper;
+import quizretakes.bean.*;
 
-public class WeekView extends GridPane {
+/**
+ * UI element that allows users to visually select which quiz to retake at which retake session.
+ * One week at a time is shown <i>(Users can move through weeks)</i>.
+ *
+ * @author Matt Coley
+ */
+public class WeekView extends VBox {
 	// Time formats
 	/**
 	 * Sample: 2/7/19
@@ -38,11 +42,111 @@ public class WeekView extends GridPane {
 	 * Time of day that the view ends at.
 	 */
 	private static final LocalTime timeEnd = LocalTime.of(19, 0);
+	/**
+	 * Wrapper holding all course information.
+	 */
+	private final DataWrapper wrap;
+	/**
+	 * Currently displayed week in the {@link #grid}.
+	 */
+	private LocalDate day;
+	/**
+	 * The selected quiz to retake.
+	 */
+	private QuizBean quiz;
+	/**
+	 * The selected retake session to attend.
+	 */
+	private RetakeBean retake;
+	/**
+	 * The number of days after a quiz a retake is allowed.
+	 */
+	private final int daysAvailable;
+	/**
+	 * Grid to display quizes and retakes on.
+	 */
+	private final GridPane grid = new GridPane();
+	/**
+	 * Label displaying the selected {@link #quiz}.
+	 */
+	private final Label lblQuiz = new Label();
+	/**
+	 * Label displaying the selected {@link #retake}.
+	 */
+	private final Label lblRetake = new Label();
+	/**
+	 * Text input for the student's name for scheduling.
+	 */
+	private final TextField txtName = new TextField();
+	/**
+	 * Button to register the {@link #txtName student} for their retake.
+	 */
+	private final Button btnRegister = new Button("Register");
 
-	public WeekView(BeanWrapper wrap) {
-		// TODO: Allow user to tab to the next week
-		LocalDate today = LocalDate.now();
-		LocalDate weekStart = today.minusDays(today.getDayOfWeek().getValue() - 1);
+	public WeekView(DataWrapper wrap) {
+		this.wrap = wrap;
+		setup();
+		repopulate();
+		daysAvailable = wrap.getCourse().getRetakeDuration();
+	}
+
+	/**
+	 * Configure all UI elements.
+	 */
+	private void setup() {
+		// Setup navigation
+		// - day to mark beginning of week
+		// - can be moved forward/backwards in weeks
+		day = LocalDate.now();
+		day = day.minusDays(day.getDayOfWeek().getValue() - 1);
+		TilePane nav = new TilePane(Orientation.HORIZONTAL);
+		nav.setPadding(new Insets(5, 10, 5, 0));
+		nav.setHgap(10.0);
+		nav.setAlignment(Pos.CENTER);
+		Button btnPrev = new Button("Previous");
+		Button btnNext = new Button("  Next  ");
+		Label lblCurrent = new Label(getCurrentDateText());
+		btnPrev.setOnAction(e -> {
+			// Go back a week
+			day = day.minusDays(7);
+			lblCurrent.setText(getCurrentDateText());
+			repopulate();
+		});
+		btnNext.setOnAction(e -> {
+			// Go forward a week
+			day = day.plusDays(7);
+			lblCurrent.setText(getCurrentDateText());
+			repopulate();
+		});
+		nav.getChildren().addAll(btnPrev, lblCurrent, btnNext);
+		// Setup current selection display (registration form, has all needed fields)
+		TilePane registerForm = new TilePane(Orientation.HORIZONTAL);
+		registerForm.setAlignment(Pos.CENTER);
+		registerForm.setPadding(new Insets(4, 0, 9, 0));
+		txtName.setPromptText("Enter your name");
+		txtName.textProperty().addListener(e -> updateForm());
+		btnRegister.setDisable(true);
+		btnRegister.setOnAction(e -> {
+			// If the button is enabled (valid input required) they can register for an
+			// appointment.
+			wrap.registerAppointment(quiz, retake, txtName.getText());
+			reset();
+		});
+		registerForm.getChildren().addAll(lblQuiz, lblRetake, txtName, btnRegister);
+		// Set initial form text
+		updateForm();
+		// Add all components (grid is set up in 'repopulate')
+		getChildren().addAll(nav, registerForm, new ScrollPane(grid));
+	}
+
+	/**
+	 * Populate the grid with the week indicated by the selected {@link #day}.
+	 */
+	private void repopulate() {
+		// Reset grid items
+		grid.getChildren().clear();
+		// Get week range to display
+		LocalDate weekStart = day.minusDays(day.getDayOfWeek().getValue() - 1);
 		LocalDate weekEnd = weekStart.plusDays(6);
 		int row = 1;
 		// Create grid column labels (date)
@@ -51,14 +155,14 @@ public class WeekView extends GridPane {
 			lblDate.setPadding(new Insets(1));
 			lblDate.setTextAlignment(TextAlignment.CENTER);
 			GridPane.setHalignment(lblDate, HPos.CENTER);
-			add(lblDate, date.getDayOfWeek().getValue(), 0);
+			grid.add(lblDate, date.getDayOfWeek().getValue(), 0);
 		}
 		// Create grid row labels (time)
 		for(LocalDateTime time = weekStart.atTime(timeStart); !time.isAfter(weekStart.atTime
 				(timeEnd)); time = time.plus(SLOT_LEN)) {
-			Label lblSlotTime = new Label(time.format(FMT_TIME));
+			Label lblSlotTime = new Label(getTimeText(time));
 			GridPane.setHalignment(lblSlotTime, HPos.RIGHT);
-			add(lblSlotTime, 0, row);
+			grid.add(lblSlotTime, 0, row);
 			row++;
 		}
 		// Create grid entries (time-slots per day)
@@ -69,7 +173,7 @@ public class WeekView extends GridPane {
 				// Create the slot
 				QuizSlot slot = new QuizSlot(time);
 				Node view = slot.getView();
-				add(view, slot.getTime().getDayOfWeek().getValue(), row);
+				grid.add(view, slot.getTime().getDayOfWeek().getValue(), row);
 				row++;
 				// Find matching quizzes at the given time. Apply to the slot if found.
 				// Final to allow stream access to non-final variable "time".
@@ -82,6 +186,118 @@ public class WeekView extends GridPane {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Register click events so that the user can sign up for a quiz retake.
+	 *
+	 * @param slot
+	 * 		The timeslot to register.
+	 */
+	private void registerEvents(QuizSlot slot) {
+		slot.getView().setOnMouseClicked(e -> {
+			if(slot.getQuiz() instanceof RetakeBean) {
+				retake = (RetakeBean) slot.getQuiz();
+			} else {
+				quiz = slot.getQuiz();
+			}
+			updateForm();
+		});
+	}
+
+	/**
+	 * Update the registration form's components when the user's input changes.
+	 */
+	private void updateForm() {
+		// Update labels
+		if(quiz != null) {
+			String sQuiz = String.valueOf(quiz.getID()) + " @" + getDateText(quiz.getDate());
+			lblQuiz.setText("Quiz: " + sQuiz);
+		} else {
+			lblQuiz.setText("Quiz: Select a quiz");
+		}
+		if(retake != null) {
+			String sRetake = String.valueOf(retake.getID()) + " @" + getDateText(retake.getDate());
+			lblRetake.setText("Retake: " + sRetake);
+		} else {
+			lblRetake.setText("Retake: Select a retake");
+		}
+		// Set disabled state of the button based on validity of inputs.
+		// - Raw input checks
+		boolean disabled = quiz == null || retake == null || txtName.getText().isEmpty();
+		if(!disabled) {
+			// Button is set to not be disabled, so the raw-input is OK.
+			// Need to do a date-check on the quiz/retake relation.
+			int diff = retake.getDate().getDayOfYear() - quiz.getDate().getDayOfYear();
+			CourseBean c = wrap.getCourse();
+			LocalDate end = quiz.getDate().plusDays(daysAvailable);
+			int allowed = daysAvailable;
+			// Skip range check, add one week if end-date is in skip-time.
+			if(end.isAfter(c.getStartSkip()) && end.isBefore(c.getEndSkip())) {
+				allowed += 7;
+			}
+			// Ensure selected items are within the allowed number of days.
+			disabled = diff < 0 || diff > allowed;
+		}
+		btnRegister.setDisable(disabled);
+	}
+
+	/**
+	 * Reset inputs and tell the user that their appointment was successfully registered.
+	 */
+	private void reset() {
+		// Success popup
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("Successfully registered");
+		alert.setHeaderText("Your appointment has been scheduled");
+		alert.setContentText("Please arrive in time to finish the quiz before the end of the " +
+				"retake period.\nIf you cannot make it, please cancel by sending email to " +
+				"your professor.\n\n"
+				+ "Your retake session is at " + getDateText(retake.getDate()) + "-" +
+				getTimeText(retake.getTime()) + " in " + retake.getLocation());
+		alert.showAndWait();
+		// Reset inputs
+		txtName.setText("");
+		quiz = null;
+		retake = null;
+		updateForm();
+	}
+
+	/**
+	 * @return Formatted string of the current week date.
+	 */
+	private String getCurrentDateText() {
+		return getDateText(day);
+	}
+
+	/**
+	 * @param date
+	 * 		Date to format.
+	 *
+	 * @return Formatted string of the given day.
+	 */
+	private String getDateText(LocalDate date) {
+		return date.format(FMT_DATE);
+	}
+
+	/**
+	 * @param time
+	 * 		Time to format.
+	 *
+	 * @return Formatted string of the given time.
+	 */
+	private String getTimeText(LocalTime time) {
+		return time.format(FMT_TIME);
+	}
+
+	/**
+	 * @param time
+	 * 		Time to format.
+	 *
+	 * @return Formatted string of the given time.
+	 */
+	private String getTimeText(LocalDateTime time) {
+		return time.format(FMT_TIME);
 	}
 
 	/**
@@ -99,18 +315,5 @@ public class WeekView extends GridPane {
 		// The time specified in XML must be in a duration as specified by the constant above.
 		LocalDateTime quizTime = quiz.getDate().atTime(quiz.getTime());
 		return quizTime.equals(time);
-	}
-
-	/**
-	 * Register click events so that the user can sign up for a quiz retake.
-	 *
-	 * @param slot
-	 * 		The timeslot to register.
-	 */
-	private static void registerEvents(QuizSlot slot) {
-		// TODO: On-click:
-		// - confirm they meant this class
-		// - prompt name
-		// - write appointment to disk
 	}
 }

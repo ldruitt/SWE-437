@@ -2,14 +2,15 @@ package quizretakes;
 
 import javafx.animation.*;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import quizretakes.bean.*;
 import quizretakes.ui.WeekView;
 
 /**
@@ -21,7 +22,7 @@ public class FxMain extends Application {
 	/**
 	 * Application window size constants.
 	 */
-	private final static int WIDTH = 620, HEIGHT = 605;
+	private final static int WIDTH = 630, HEIGHT = 605;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -32,23 +33,24 @@ public class FxMain extends Application {
 		viewPrompt.setAlignment(Pos.CENTER);
 		TextField txtCourse = new TextField();
 		txtCourse.setPromptText("Specify a course ID");
-		Button btnSelect = new Button("Go");
+		Button btnSelect = new Button("  Go  ");
 		btnSelect.setOnAction(e -> {
 			// Fetch course information
 			String courseID = txtCourse.getText().toLowerCase();
-			BeanWrapper wrap = ReaderUtils.load(courseID);
+			DataWrapper wrap = ReaderUtils.load(courseID);
 			if(wrap == null) {
 				// Show error message if the course could not be loaded
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("Failed to find course information");
+				alert.setHeaderText(null);
 				alert.setContentText("The specified class does not exist. Please check if you " +
-						"have" + " entered the correct course ID.");
+						"have entered the correct course ID.");
 				alert.showAndWait();
 				return;
 			}
 			// Create a view that displays the loaded course information.
 			// Add it to the root pane.
-			ScrollPane viewQuizes = new ScrollPane(new WeekView(wrap));
+			Node viewQuizes = new WeekView(wrap);
 			root.getChildren().add(viewQuizes);
 			// Fancy animation to the new display into view.
 			// Initial prompt is discarded on completion.
@@ -63,6 +65,8 @@ public class FxMain extends Application {
 			animation.setOnFinished(ee -> root.getChildren().remove(viewPrompt));
 			animation.play();
 		});
+		// Hitting '[ENTER]' will also work as clicking the button.
+		txtCourse.setOnAction(btnSelect.getOnAction());
 		viewPrompt.getChildren().addAll(txtCourse, btnSelect);
 		root.getChildren().add(viewPrompt);
 		// Create the stage and set the scene.

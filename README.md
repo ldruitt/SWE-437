@@ -21,6 +21,7 @@ The following pros & cons pertain to the _initial state_ of the software. Some o
 
 **Cons:**
 
+* Expected type of `daysAvailable` is documented to be an `int` but is defined as `String` in the code.
 * Build/deploy systems were system-dependent
     * `Makefile` did not work out-of-the-box with a fresh installation of JDK-8
         * Dependencies _(javax.servlet)_ needed to be manually specified by the user in order to compile

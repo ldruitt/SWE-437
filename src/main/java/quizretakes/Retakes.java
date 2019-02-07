@@ -1,6 +1,5 @@
 package quizretakes;
 
-import quizretakes.bean.QuizBean;
 import quizretakes.bean.RetakeBean;
 
 import java.util.*;

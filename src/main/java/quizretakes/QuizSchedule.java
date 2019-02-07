@@ -33,9 +33,6 @@ public class QuizSchedule extends HttpServlet {
 
 	// Passed as parameter and stored in course.xml file (format: "swe437")
 	private String courseID;
-	// Stored in course.xml file, default 14
-	// Number of days a retake is offered after the quiz is given
-	private int daysAvailable = 14;
 	// To be set by getRequestURL()
 	private String thisServlet = "";
 
@@ -176,6 +173,9 @@ public class QuizSchedule extends HttpServlet {
 		out.println("  <br/>");
 
 		LocalDate today = LocalDate.now();
+		// Stored in course.xml file, default 14
+		// Number of days a retake is offered after the quiz is given
+		int daysAvailable = 14;
 		LocalDate endDay = today.plusDays((long) daysAvailable);
 		LocalDate origEndDay = endDay;
 		// if endDay is between startSkip and endSkip, add 7 to endDay
