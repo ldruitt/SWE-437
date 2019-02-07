@@ -5,7 +5,6 @@ import quizretakes.bean.AppointmentBean;
 import quizretakes.bean.CourseBean;
 import quizretakes.bean.QuizBean;
 import quizretakes.bean.RetakeBean;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -29,6 +28,18 @@ public class DataWrapper {
 		this.appointments = appointments;
 	}
 
+	/**
+	 * Registers an appointment, then updates the text-list on the file system.
+	 *
+	 * @param quiz
+	 * 		Quiz to retake.
+	 * @param retake
+	 * 		Retake session to retake at.
+	 * @param name
+	 * 		Student name.
+	 *
+	 * @return Appointment successfully written to file.
+	 */
 	public boolean registerAppointment(QuizBean quiz, RetakeBean retake, String name) {
 		try {
 			appointments.add(new AppointmentBean(retake.getID(), quiz.getID(), name));
