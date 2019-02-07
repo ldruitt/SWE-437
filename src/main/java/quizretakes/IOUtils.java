@@ -16,7 +16,7 @@ import java.io.*;
 /**
  * Course XML data utilities.
  */
-public class ReaderUtils {
+public class IOUtils {
 	/**
 	 * Document parsing factory.
 	 */
@@ -51,7 +51,7 @@ public class ReaderUtils {
 		CourseBean course;
 		String courseFileName = baseCourse + "-" + courseID + ".xml";
 		try {
-			course = ReaderUtils.course(courseFileName);
+			course = IOUtils.course(courseFileName);
 		} catch(Exception ex) {
 			return null;
 		}
@@ -68,9 +68,9 @@ public class ReaderUtils {
 
 		try {
 			// Read the files and put in wrapper bean
-			quizList = ReaderUtils.quizzes(quizzesFileName);
-			retakesList = ReaderUtils.retakes(retakesFileName);
-			appointments = ReaderUtils.appointments(apptsFileName);
+			quizList = IOUtils.quizzes(quizzesFileName);
+			retakesList = IOUtils.retakes(retakesFileName);
+			appointments = IOUtils.appointments(apptsFileName);
 			return new DataWrapper(course, quizList, retakesList, appointments);
 		} catch(Exception ex) {
 			return null;
@@ -103,7 +103,7 @@ public class ReaderUtils {
 		RetakeBean retake;
 
 		DocumentBuilder builder = FACTORY.newDocumentBuilder();
-		Document document = builder.parse(ReaderUtils.class.getResourceAsStream("/" + filename));
+		Document document = builder.parse(IOUtils.class.getResourceAsStream("/" + filename));
 
 		// Get all the nodes
 		NodeList nodeList = document.getDocumentElement().getChildNodes();
@@ -141,7 +141,7 @@ public class ReaderUtils {
 		CourseBean course = null;
 
 		DocumentBuilder builder = FACTORY.newDocumentBuilder();
-		Document document = builder.parse(ReaderUtils.class.getResourceAsStream("/" + filename));
+		Document document = builder.parse(IOUtils.class.getResourceAsStream("/" + filename));
 
 		// Get all the nodes
 		NodeList nodeList = document.getDocumentElement().getChildNodes();
@@ -180,7 +180,7 @@ public class ReaderUtils {
 		Quizzes quizList = new Quizzes();
 
 		DocumentBuilder builder = FACTORY.newDocumentBuilder();
-		Document document = builder.parse(ReaderUtils.class.getResourceAsStream("/" + filename));
+		Document document = builder.parse(IOUtils.class.getResourceAsStream("/" + filename));
 
 		// Get all the nodes
 		NodeList nodeList = document.getDocumentElement().getChildNodes();

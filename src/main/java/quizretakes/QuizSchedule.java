@@ -36,7 +36,7 @@ public class QuizSchedule extends Application {
 		btnSelect.setOnAction(e -> {
 			// Fetch course information
 			String courseID = txtCourse.getText().toLowerCase();
-			DataWrapper wrap = ReaderUtils.load(courseID);
+			DataWrapper wrap = IOUtils.load(courseID);
 			if(wrap == null) {
 				// Show error message if the course could not be loaded
 				Alert alert = new Alert(Alert.AlertType.ERROR);
