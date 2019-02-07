@@ -1,6 +1,6 @@
 # SWE-437 :: Quiz Scheduler
 
-The first assignment for [SWE-437](https://cs.gmu.edu/~offutt/classes/437/index.html) on Software Evolution. 
+The [second assignment](https://cs.gmu.edu/~offutt/classes/437/assigns/assign02.html) for [SWE-437](https://cs.gmu.edu/~offutt/classes/437/index.html) on Software Evolution. 
 
 ![preview](preview.gif)
 
