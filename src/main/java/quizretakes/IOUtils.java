@@ -8,6 +8,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.lang.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.*;
@@ -25,6 +27,12 @@ public class IOUtils {
 	 * Separator used for appointment information.
 	 */
 	private static final String SEPARATOR = ",";
+	// File name constants
+	private static final String BASE_COURSE = "course";
+	private static final String BASE_QUIZZES = "quiz-orig";
+	private static final String BASE_RETAKES = "quiz-retakes";
+	private static final String BASE_APPTS = "quiz-appts";
+
 
 	/**
 	 * Read all information of a given course.
@@ -41,15 +49,9 @@ public class IOUtils {
 	 * @return Wrapper of course data.  {@code null} if the course files could not be located.
 	 */
 	public static DataWrapper load(String courseID) {
-		// File name constants
-		String baseCourse = "course";
-		String baseQuizzes = "quiz-orig";
-		String baseRetakes = "quiz-retakes";
-		String baseAppts = "quiz-appts";
-
 		// Load the course info
 		CourseBean course;
-		String courseFileName = baseCourse + "-" + courseID + ".xml";
+		String courseFileName = BASE_COURSE + "-" + courseID + ".xml";
 		try {
 			course = IOUtils.course(courseFileName);
 		} catch(Exception ex) {
@@ -57,9 +59,9 @@ public class IOUtils {
 		}
 
 		// Filenames to be built from above and the courseID
-		String quizzesFileName = baseQuizzes + "-" + courseID + ".xml";
-		String retakesFileName = baseRetakes + "-" + courseID + ".xml";
-		String apptsFileName = baseAppts + "-" + courseID + ".txt";
+		String quizzesFileName = BASE_QUIZZES + "-" + courseID + ".xml";
+		String retakesFileName = BASE_RETAKES + "-" + courseID + ".xml";
+		String apptsFileName = BASE_APPTS + "-" + courseID + ".txt";
 
 		// Load the quizzes, retakes, and current appointments
 		Quizzes quizList;
@@ -77,13 +79,33 @@ public class IOUtils {
 		}
 	}
 
+	/**
+	 * Write all appointments to the course's appointments file.
+	 *
+	 * @param wrap
+	 * 		Course information wrapper.
+	 *
+	 * @throws IOException
+	 * 		Thrown when file cannot be written to.
+	 */
+	public static void writeAppointments(DataWrapper wrap) throws IOException {
+		// Create content of appointments file
+		StringBuilder sb = new StringBuilder();
+		for(AppointmentBean appt : wrap.getAppointments()) {
+			// retake,quiz,name
+			sb.append(appt.getRetakeID()).append(",").append(appt.getQuizID()).append(",").append
+					(appt.getName()).append("\n");
+		}
+		byte[] strToBytes = sb.toString().getBytes();
+		// Write the text to the file-system
+		String apptsFileName = BASE_APPTS + "-" + wrap.getCourse().getCourseID() + ".txt";
+		Files.write(Paths.get(apptsFileName), strToBytes);
+	}
+
 	private static List<AppointmentBean> appointments(String filename) throws IOException {
 		List<AppointmentBean> appts = new ArrayList<>();
 		File file = new File(filename);
-		if(!file.exists()) {
-			System.out.println("No appointments file to read from!");
-			file.createNewFile();
-		} else {
+		if(file.exists()) {
 			FileReader fw = new FileReader(file.getAbsoluteFile());
 			BufferedReader bw = new BufferedReader(fw);
 			String line;

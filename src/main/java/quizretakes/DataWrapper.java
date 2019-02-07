@@ -6,6 +6,7 @@ import quizretakes.bean.CourseBean;
 import quizretakes.bean.QuizBean;
 import quizretakes.bean.RetakeBean;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -28,8 +29,13 @@ public class DataWrapper {
 		this.appointments = appointments;
 	}
 
-	public void registerAppointment(QuizBean quiz, RetakeBean retake, String name) {
-		// TODO: Write appointment to file
-		System.out.println(retake.getID() + "," + quiz.getID() + "," + name);
+	public boolean registerAppointment(QuizBean quiz, RetakeBean retake, String name) {
+		try {
+			appointments.add(new AppointmentBean(retake.getID(), quiz.getID(), name));
+			IOUtils.writeAppointments(this);
+			return true;
+		} catch(IOException e) {
+			return false;
+		}
 	}
 }

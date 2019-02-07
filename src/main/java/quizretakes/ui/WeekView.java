@@ -5,6 +5,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.stream.Stream;
+
 import javafx.geometry.*;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -127,10 +128,19 @@ public class WeekView extends VBox {
 		txtName.textProperty().addListener(e -> updateForm());
 		btnRegister.setDisable(true);
 		btnRegister.setOnAction(e -> {
-			// If the button is enabled (valid input required) they can register for an
-			// appointment.
-			wrap.registerAppointment(quiz, retake, txtName.getText());
-			reset();
+			// registering returns a boolean for it's success.
+			if(wrap.registerAppointment(quiz, retake, txtName.getText())) {
+				// register success
+				resetOnSuccess();
+			} else {
+				// register failed due to silenced IOException
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setTitle("Failed to register appointment");
+				alert.setHeaderText(null);
+				alert.setContentText("The quiz retake could not be made at this time. Contact the"
+						+ " professor if this issue persists.");
+				alert.showAndWait();
+			}
 		});
 		registerForm.getChildren().addAll(lblQuiz, lblRetake, txtName, btnRegister);
 		// Set initial form text
@@ -245,16 +255,15 @@ public class WeekView extends VBox {
 	/**
 	 * Reset inputs and tell the user that their appointment was successfully registered.
 	 */
-	private void reset() {
+	private void resetOnSuccess() {
 		// Success popup
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		alert.setTitle("Successfully registered");
 		alert.setHeaderText("Your appointment has been scheduled");
 		alert.setContentText("Please arrive in time to finish the quiz before the end of the " +
 				"retake period.\nIf you cannot make it, please cancel by sending email to " +
-				"your professor.\n\n"
-				+ "Your retake session is at " + getDateText(retake.getDate()) + "-" +
-				getTimeText(retake.getTime()) + " in " + retake.getLocation());
+				"your professor.\n\n" + "Your retake session is at " + getDateText(retake.getDate
+				()) + "-" + getTimeText(retake.getTime()) + " in " + retake.getLocation());
 		alert.showAndWait();
 		// Reset inputs
 		txtName.setText("");
