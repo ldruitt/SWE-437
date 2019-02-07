@@ -96,10 +96,9 @@ public class IOUtils {
 			sb.append(appt.getRetakeID()).append(",").append(appt.getQuizID()).append(",").append
 					(appt.getName()).append("\n");
 		}
-		byte[] strToBytes = sb.toString().getBytes();
 		// Write the text to the file-system
 		String apptsFileName = BASE_APPTS + "-" + wrap.getCourse().getCourseID() + ".txt";
-		Files.write(Paths.get(apptsFileName), strToBytes);
+		Files.write(Paths.get(apptsFileName), sb.toString().getBytes());
 	}
 
 	private static List<AppointmentBean> appointments(String filename) throws IOException {
