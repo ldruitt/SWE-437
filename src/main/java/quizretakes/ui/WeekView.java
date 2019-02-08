@@ -291,6 +291,7 @@ public class WeekView extends VBox {
 		quiz = null;
 		retake = null;
 		updateForm();
+		updateSelectionCSS();
 	}
 
 	/**
