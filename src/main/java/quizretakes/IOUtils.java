@@ -152,7 +152,7 @@ public class IOUtils {
 		}
 		// XML file may not be sorted
 		retakeList.sort();
-		return (retakeList);
+		return retakeList;
 	}
 
 	private static CourseBean course(String filename) throws IOException,
@@ -188,7 +188,7 @@ public class IOUtils {
 				course = new CourseBean(courseID, courseTitle, retakeDuration, startSkip, endSkip);
 			}
 		}
-		return (course);
+		return course;
 	}
 
 	private static Quizzes quizzes(String filename) throws IOException,
@@ -220,7 +220,7 @@ public class IOUtils {
 		}
 		// XML file may not be sorted
 		quizList.sort();
-		return (quizList);
+		return quizList;
 	}
 
 	/**
