@@ -1,6 +1,9 @@
 package quizretakes.ui;
 
 import java.time.LocalDateTime;
+
+import javafx.css.PseudoClass;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import quizretakes.bean.QuizBean;
@@ -14,6 +17,10 @@ import lombok.Data;
  */
 @Data
 public class QuizSlot {
+	/**
+	 * Selected pseudo-class. Used by {@link #setSelected(boolean)}.
+	 */
+	private static final PseudoClass PSEUDO_SELECTED = PseudoClass.getPseudoClass("selected");
 	/**
 	 * Time of the quiz/retake.
 	 */
@@ -34,6 +41,10 @@ public class QuizSlot {
 		view.setMinSize(80, 20);
 	}
 
+	/**
+	 * @param quiz
+	 * 		Quiz to put in this slot.
+	 */
 	public void setQuiz(QuizBean quiz) {
 		this.quiz = quiz;
 		// Add a label and custom style to the slot depending on if the quiz is an instance of a
@@ -48,5 +59,15 @@ public class QuizSlot {
 			view.getStyleClass().add("quiz-slot");
 		}
 		view.getChildren().add(lbl);
+	}
+
+	/**
+	 * Update pseudo-class 'selected'.
+	 *
+	 * @param selected
+	 * 		Selected state.
+	 */
+	public void setSelected(boolean selected) {
+		view.pseudoClassStateChanged(PSEUDO_SELECTED, selected);
 	}
 }

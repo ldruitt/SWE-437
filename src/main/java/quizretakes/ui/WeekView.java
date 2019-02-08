@@ -3,7 +3,9 @@ package quizretakes.ui;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import javafx.geometry.*;
@@ -67,6 +69,10 @@ public class WeekView extends VBox {
 	 * Grid to display quizes and retakes on.
 	 */
 	private final GridPane grid = new GridPane();
+	/**
+	 * Easy access to all quiz-slots in the {@link #grid}.
+	 */
+	private final Set<QuizSlot> slots = new HashSet<>();
 	/**
 	 * Label displaying the selected {@link #quiz}.
 	 */
@@ -155,6 +161,7 @@ public class WeekView extends VBox {
 	private void repopulate() {
 		// Reset grid items
 		grid.getChildren().clear();
+		slots.clear();
 		// Get week range to display
 		LocalDate weekStart = day.minusDays(day.getDayOfWeek().getValue() - 1);
 		LocalDate weekEnd = weekStart.plusDays(6);
@@ -191,11 +198,13 @@ public class WeekView extends VBox {
 				Optional<QuizBean> quizFound = Stream.concat(wrap.getQuizzes().stream(), wrap
 						.getRetakes().stream()).filter(q -> match(q, timeAlias)).findAny();
 				if(quizFound.isPresent()) {
+					slots.add(slot);
 					slot.setQuiz(quizFound.get());
 					registerEvents(slot);
 				}
 			}
 		}
+		updateSelectionCSS();
 	}
 
 	/**
@@ -206,13 +215,25 @@ public class WeekView extends VBox {
 	 */
 	private void registerEvents(QuizSlot slot) {
 		slot.getView().setOnMouseClicked(e -> {
+			// Update selected quiz and retake elements
 			if(slot.getQuiz() instanceof RetakeBean) {
 				retake = (RetakeBean) slot.getQuiz();
 			} else {
 				quiz = slot.getQuiz();
 			}
+			// Update selection css pseudo classes of slots
+			updateSelectionCSS();
+			// Update the form
 			updateForm();
 		});
+	}
+
+	/**
+	 * Update the 'selected' pseudo-class of the slots. This more clearly shows the user which
+	 * item they have selected since they are more vibrant.
+	 */
+	private void updateSelectionCSS() {
+		slots.forEach(s -> s.setSelected(s.getQuiz().equals(quiz) || s.getQuiz().equals(retake)));
 	}
 
 	/**
