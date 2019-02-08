@@ -28,6 +28,7 @@ public class IOUtils {
 	 */
 	private static final String SEPARATOR = ",";
 	// File name constants
+	private static final String XML_DIR = "data";
 	private static final String BASE_COURSE = "course";
 	private static final String BASE_QUIZZES = "quiz-orig";
 	private static final String BASE_RETAKES = "quiz-retakes";
@@ -123,11 +124,8 @@ public class IOUtils {
 		Retakes retakeList = new Retakes();
 		RetakeBean retake;
 
-		DocumentBuilder builder = FACTORY.newDocumentBuilder();
-		Document document = builder.parse(IOUtils.class.getResourceAsStream("/" + filename));
-
 		// Get all the nodes
-		NodeList nodeList = document.getDocumentElement().getChildNodes();
+		NodeList nodeList = getDocument(filename).getDocumentElement().getChildNodes();
 		for(int i = 0; i < nodeList.getLength(); i++) {
 			// XML structure is simple--a bunch of quizzes
 			// Not validating the data values
@@ -161,11 +159,8 @@ public class IOUtils {
 			ParserConfigurationException, SAXException {
 		CourseBean course = null;
 
-		DocumentBuilder builder = FACTORY.newDocumentBuilder();
-		Document document = builder.parse(IOUtils.class.getResourceAsStream("/" + filename));
-
 		// Get all the nodes
-		NodeList nodeList = document.getDocumentElement().getChildNodes();
+		NodeList nodeList = getDocument(filename).getDocumentElement().getChildNodes();
 		for(int i = 0; i < nodeList.getLength(); i++) {
 			// XML structure is simple--6 elements
 			// Not validating the data values
@@ -199,12 +194,9 @@ public class IOUtils {
 	private static Quizzes quizzes(String filename) throws IOException,
 			ParserConfigurationException, SAXException {
 		Quizzes quizList = new Quizzes();
-
-		DocumentBuilder builder = FACTORY.newDocumentBuilder();
-		Document document = builder.parse(IOUtils.class.getResourceAsStream("/" + filename));
-
-		// Get all the nodes
-		NodeList nodeList = document.getDocumentElement().getChildNodes();
+		
+		// Get all the node
+		NodeList nodeList = getDocument(filename).getDocumentElement().getChildNodes();
 		for(int i = 0; i < nodeList.getLength(); i++) {
 			// XML structure is simple--a bunch of quizzes
 			// Not validating the data values
@@ -231,6 +223,30 @@ public class IOUtils {
 		return (quizList);
 	}
 
+	/**
+	 * @param filename
+	 * 		Name of XML data file.
+	 *
+	 * @return XML Tree structure for the given file.
+	 *
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 */
+	private static Document getDocument(String filename) throws IOException,
+			ParserConfigurationException, SAXException {
+		DocumentBuilder builder = FACTORY.newDocumentBuilder();
+		return builder.parse(IOUtils.class.getResourceAsStream("/" + XML_DIR + "/" + filename));
+	}
+
+	/**
+	 * @param host
+	 * 		Host that holds the tag to fetch.
+	 * @param name
+	 * 		Name of tag to fetch.
+	 *
+	 * @return String representation of the given tag's value
+	 */
 	private static String getValue(Element host, String name) {
 		return host.getElementsByTagName(name).item(0).getChildNodes().item(0).getNodeValue();
 	}
