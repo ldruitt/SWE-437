@@ -194,7 +194,7 @@ public class IOUtils {
 	private static Quizzes quizzes(String filename) throws IOException,
 			ParserConfigurationException, SAXException {
 		Quizzes quizList = new Quizzes();
-		
+
 		// Get all the node
 		NodeList nodeList = getDocument(filename).getDocumentElement().getChildNodes();
 		for(int i = 0; i < nodeList.getLength(); i++) {

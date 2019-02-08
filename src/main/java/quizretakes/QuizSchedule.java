@@ -27,6 +27,7 @@ public class QuizSchedule extends Application {
 	public void start(Stage primaryStage) {
 		// Root node that components will be added to.
 		StackPane root = new StackPane();
+		root.getStyleClass().add("main");
 		// Create prompt to ask user for a course
 		HBox viewPrompt = new HBox();
 		viewPrompt.setAlignment(Pos.CENTER);
@@ -49,7 +50,7 @@ public class QuizSchedule extends Application {
 			}
 			// Create a view that displays the loaded course information.
 			// Add it to the root pane.
-			Node viewQuizes = new WeekView(wrap);
+			WeekView viewQuizes = new WeekView(wrap);
 			root.getChildren().add(viewQuizes);
 			// Fancy animation to the new display into view.
 			// Initial prompt is discarded on completion.
