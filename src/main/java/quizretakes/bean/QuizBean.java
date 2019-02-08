@@ -48,26 +48,4 @@ public class QuizBean implements Comparable<QuizBean> {
 	public String toString() {
 		return ID + ": " + date.toString() + ": " + date.getDayOfWeek() + ": " + time.toString();
 	}
-
-	// Date methods
-	public Month getMonth() {
-		return date.getMonth();
-	}
-
-	public int getMonthNum() {
-		return date.getMonthValue();
-	}
-
-	public DayOfWeek getDayOfWeek() {
-		return date.getDayOfWeek();
-	}
-
-	public String dateAsString() {
-		return date.toString();
-	}
-
-	// Time methods
-	public String timeAsString() {
-		return time.toString();
-	}
 }
