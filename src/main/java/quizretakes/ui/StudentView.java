@@ -22,7 +22,7 @@ import quizretakes.bean.*;
  *
  * @author Matt Coley
  */
-public class WeekView extends VBox {
+public class StudentView extends VBox {
 	// Time formats
 	/**
 	 * Sample: 2/7/19
@@ -90,7 +90,7 @@ public class WeekView extends VBox {
 	 */
 	private final Button btnRegister = new Button("Register");
 
-	public WeekView(DataWrapper wrap) {
+	public StudentView(DataWrapper wrap) {
 		this.wrap = wrap;
 		setup();
 		repopulate();

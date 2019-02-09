@@ -11,7 +11,7 @@ import quizretakes.bean.RetakeBean;
 import lombok.Data;
 
 /**
- * Representation of a quiz or retake that can be displayed as a slot in the WeekView.
+ * Representation of a quiz or retake that can be displayed as a slot in the StudentView's grid.
  *
  * @author Matt Coley
  */

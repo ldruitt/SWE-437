@@ -6,11 +6,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import quizretakes.ui.WeekView;
+import quizretakes.ui.StaffView;
+import quizretakes.ui.StudentView;
 
 /**
  * JavaFX front end for the Quiz-Retake application.
@@ -34,7 +36,7 @@ public class QuizSchedule extends Application {
 		TextField txtCourse = new TextField();
 		txtCourse.setPromptText("Specify a course ID");
 		Button btnSelect = new Button("  Go  ");
-		btnSelect.setOnAction(e -> {
+		btnSelect.setOnMouseClicked(e -> {
 			// Fetch course information
 			String courseID = txtCourse.getText().toLowerCase();
 			DataWrapper wrap = IOUtils.load(courseID);
@@ -49,8 +51,10 @@ public class QuizSchedule extends Application {
 				return;
 			}
 			// Create a view that displays the loaded course information.
-			// Add it to the root pane.
-			WeekView viewQuizes = new WeekView(wrap);
+			// For staff looking to view student information, holding '[SHIFT]' when clicking 'Go'
+			// will display the staff-view instead of the student's scheduling view.
+			// TODO: More intuitive way. Temporary until I can make something that looks nice
+			Node viewQuizes = e.isShiftDown() ? new StaffView(wrap) : new StudentView(wrap);
 			root.getChildren().add(viewQuizes);
 			// Fancy animation to the new display into view.
 			// Initial prompt is discarded on completion.
