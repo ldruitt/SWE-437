@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.util.*;
 import java.io.*;
+import java.util.stream.Stream;
 
 /**
  * Course XML data utilities.
@@ -123,32 +124,22 @@ public class IOUtils {
 			ParserConfigurationException, SAXException {
 		Retakes retakeList = new Retakes();
 		RetakeBean retake;
-
-		// Get all the nodes
-		NodeList nodeList = getDocument(filename).getDocumentElement().getChildNodes();
-		for(int i = 0; i < nodeList.getLength(); i++) {
-			// XML structure is simple--a bunch of quizzes
-			// Not validating the data values
-			Node node = nodeList.item(i);
-			if(node.getNodeType() == Node.ELEMENT_NODE) {
-				Element elem = (Element) node;
-
-				// retake IDs should be unique
-				int ID = Integer.parseInt(getValue(elem, "id"));
-				// Location is a string (building and room probably)
-				String location = getValue(elem, "location");
-				// month is an integer 1..12
-				int month = Integer.parseInt(getValue(elem, "month"));
-				// day is integer 1..31
-				int day = Integer.parseInt(getValue(elem, "day"));
-				// hour is integer 0..23
-				int hour = Integer.parseInt(getValue(elem, "hour"));
-				// minute is integer 0..59
-				int minute = Integer.parseInt(getValue(elem, "minute"));
-				// Put one XML record into a bean and add it to the list
-				retake = new RetakeBean(ID, location, month, day, hour, minute);
-				retakeList.addRetake(retake);
-			}
+		for(Element elem : getElements(filename)) {
+			// retake IDs should be unique
+			int ID = Integer.parseInt(getValue(elem, "id"));
+			// Location is a string (building and room probably)
+			String location = getValue(elem, "location");
+			// month is an integer 1..12
+			int month = Integer.parseInt(getValue(elem, "month"));
+			// day is integer 1..31
+			int day = Integer.parseInt(getValue(elem, "day"));
+			// hour is integer 0..23
+			int hour = Integer.parseInt(getValue(elem, "hour"));
+			// minute is integer 0..59
+			int minute = Integer.parseInt(getValue(elem, "minute"));
+			// Put one XML record into a bean and add it to the list
+			retake = new RetakeBean(ID, location, month, day, hour, minute);
+			retakeList.addRetake(retake);
 		}
 		// XML file may not be sorted
 		retakeList.sort();
@@ -158,35 +149,25 @@ public class IOUtils {
 	private static CourseBean course(String filename) throws IOException,
 			ParserConfigurationException, SAXException {
 		CourseBean course = null;
+		for(Element elem : getElements(filename)) {
+			// quiz IDs should be unique
+			String courseID = getValue(elem, "courseID");
+			String courseTitle = getValue(elem, "courseTitle");
+			int retakeDuration = Integer.parseInt(getValue(elem, "retakeDuration"));
+			// startSkipMonth is an integer 1..12
+			int startSkipMonth = Integer.parseInt(getValue(elem, "startSkipMonth"));
+			// startSkipDay is integer 1..31
+			int startSkipDay = Integer.parseInt(getValue(elem, "startSkipDay"));
+			// endSkipMonth is an integer 1..12
+			int endSkipMonth = Integer.parseInt(getValue(elem, "endSkipMonth"));
+			// endSkipDay is integer 1..31
+			int endSkipDay = Integer.parseInt(getValue(elem, "endSkipDay"));
 
-		// Get all the nodes
-		NodeList nodeList = getDocument(filename).getDocumentElement().getChildNodes();
-		for(int i = 0; i < nodeList.getLength(); i++) {
-			// XML structure is simple--6 elements
-			// Not validating the data values
-			Node node = nodeList.item(i);
-			if(node.getNodeType() == Node.ELEMENT_NODE) {
-				Element elem = (Element) node;
+			int year = Year.now().getValue();
+			LocalDate startSkip = LocalDate.of(year, startSkipMonth, startSkipDay);
+			LocalDate endSkip = LocalDate.of(year, endSkipMonth, endSkipDay);
 
-				// quiz IDs should be unique
-				String courseID = getValue(elem, "courseID");
-				String courseTitle = getValue(elem, "courseTitle");
-				int retakeDuration = Integer.parseInt(getValue(elem, "retakeDuration"));
-				// startSkipMonth is an integer 1..12
-				int startSkipMonth = Integer.parseInt(getValue(elem, "startSkipMonth"));
-				// startSkipDay is integer 1..31
-				int startSkipDay = Integer.parseInt(getValue(elem, "startSkipDay"));
-				// endSkipMonth is an integer 1..12
-				int endSkipMonth = Integer.parseInt(getValue(elem, "endSkipMonth"));
-				// endSkipDay is integer 1..31
-				int endSkipDay = Integer.parseInt(getValue(elem, "endSkipDay"));
-
-				int year = Year.now().getValue();
-				LocalDate startSkip = LocalDate.of(year, startSkipMonth, startSkipDay);
-				LocalDate endSkip = LocalDate.of(year, endSkipMonth, endSkipDay);
-
-				course = new CourseBean(courseID, courseTitle, retakeDuration, startSkip, endSkip);
-			}
+			course = new CourseBean(courseID, courseTitle, retakeDuration, startSkip, endSkip);
 		}
 		return course;
 	}
@@ -194,33 +175,51 @@ public class IOUtils {
 	private static Quizzes quizzes(String filename) throws IOException,
 			ParserConfigurationException, SAXException {
 		Quizzes quizList = new Quizzes();
-
-		// Get all the node
-		NodeList nodeList = getDocument(filename).getDocumentElement().getChildNodes();
-		for(int i = 0; i < nodeList.getLength(); i++) {
-			// XML structure is simple--a bunch of quizzes
-			// Not validating the data values
-			Node node = nodeList.item(i);
-			if(node.getNodeType() == Node.ELEMENT_NODE) {
-				Element elem = (Element) node;
-
-				// quiz IDs should be unique
-				int ID = Integer.parseInt(getValue(elem, "id"));
-				// month is an integer 1..12
-				int month = Integer.parseInt(getValue(elem, "month"));
-				// day is integer 1..31
-				int day = Integer.parseInt(getValue(elem, "day"));
-				// hour is integer 0..23
-				int hour = Integer.parseInt(getValue(elem, "hour"));
-				// minute is integer 0..59
-				int minute = Integer.parseInt(getValue(elem, "minute"));
-				// Put one XML record into a bean and add it to the list
-				quizList.addQuiz(new QuizBean(ID, month, day, hour, minute));
-			}
+		for(Element elem : getElements(filename)) {
+			// quiz IDs should be unique
+			int ID = Integer.parseInt(getValue(elem, "id"));
+			// month is an integer 1..12
+			int month = Integer.parseInt(getValue(elem, "month"));
+			// day is integer 1..31
+			int day = Integer.parseInt(getValue(elem, "day"));
+			// hour is integer 0..23
+			int hour = Integer.parseInt(getValue(elem, "hour"));
+			// minute is integer 0..59
+			int minute = Integer.parseInt(getValue(elem, "minute"));
+			// Put one XML record into a bean and add it to the list
+			quizList.addQuiz(new QuizBean(ID, month, day, hour, minute));
 		}
 		// XML file may not be sorted
 		quizList.sort();
 		return quizList;
+	}
+
+	/**
+	 * Get all Element nodes in a document.
+	 *
+	 * @param filename
+	 * 		Name of the document to fetch nodes from.
+	 *
+	 * @return List of element nodes.
+	 *
+	 * @throws IOException
+	 * 		Thrown when the document could not be read.
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 */
+	private static List<Element> getElements(String filename) throws IOException,
+			ParserConfigurationException, SAXException {
+		// Get all child-nodes
+		NodeList nodeList = getDocument(filename).getDocumentElement().getChildNodes();
+		List<Element> elements = new ArrayList<>();
+		for(int i = 0; i < nodeList.getLength(); i++) {
+			// Add all element nodes to the return-list.
+			Node node = nodeList.item(i);
+			if(node.getNodeType() == Node.ELEMENT_NODE) {
+				elements.add((Element) node);
+			}
+		}
+		return elements;
 	}
 
 	/**
@@ -230,6 +229,7 @@ public class IOUtils {
 	 * @return XML Tree structure for the given file.
 	 *
 	 * @throws IOException
+	 * 		Thrown when the document could not be read.
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 */
