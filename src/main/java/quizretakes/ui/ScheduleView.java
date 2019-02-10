@@ -193,7 +193,9 @@ public abstract class ScheduleView extends VBox {
 	 * @param quiz
 	 * 		Quiz in the slot.
 	 */
-	protected abstract void onSelectQuiz(QuizBean quiz);
+	protected void onSelectQuiz(QuizBean quiz) {
+		this.quiz = quiz;
+	}
 
 	/**
 	 * Called when a slot holding a RetakeBean is selected.
@@ -201,7 +203,9 @@ public abstract class ScheduleView extends VBox {
 	 * @param retake
 	 * 		Retake in the slot.
 	 */
-	protected abstract void onSelectRetake(RetakeBean retake);
+	protected void onSelectRetake(RetakeBean retake) {
+		this.retake = retake;
+	}
 
 	/**
 	 * Update the 'selected' pseudo-class of the slots. This more clearly shows the user which

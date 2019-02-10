@@ -17,6 +17,17 @@ public class StaffView extends ScheduleView {
 	}
 
 	@Override
+	protected void setup() {
+		// Initialize components
+
+		//TODO: How to elegantly display additional data to staff?
+
+		// Setup in the super-class.
+		// This will create the schedule grid & date navigation.
+		super.setup();
+	}
+
+	@Override
 	protected void onSelectQuiz(QuizBean quiz) {
 
 	}

@@ -89,14 +89,14 @@ public class StudentView extends ScheduleView {
 
 	@Override
 	protected void onSelectQuiz(QuizBean quiz) {
-		this.quiz = quiz;
+		super.onSelectQuiz(quiz);
 		// Update the form
 		updateForm();
 	}
 
 	@Override
 	protected void onSelectRetake(RetakeBean retake) {
-		this.retake = retake;
+		super.onSelectRetake(retake);
 		// Update the form
 		updateForm();
 	}
