@@ -17,115 +17,45 @@ import quizretakes.DataWrapper;
 import quizretakes.bean.*;
 
 /**
- * UI element that allows users to visually select which quiz to retake at which retake session.
- * One week at a time is shown <i>(Users can move through weeks)</i>.
+ * UI element that allows students to schedule a quiz retake.  Students will select a quiz and
+ * retake slot then enter their name and click the "submit" button to register for their quiz.
  *
  * @author Matt Coley
  */
-public class StudentView extends VBox {
-	// Time formats
-	/**
-	 * Sample: 2/7/19
-	 */
-	private static final DateTimeFormatter FMT_DATE = DateTimeFormatter.ofPattern("M/d/YY");
-	/**
-	 * Sample: 8:30 AM
-	 */
-	private static final DateTimeFormatter FMT_TIME = DateTimeFormatter.ofPattern("h:mm a");
-	/**
-	 * All slots will be 30 minutes long.
-	 */
-	private static final Duration SLOT_LEN = Duration.ofMinutes(30);
-	// Range of times to display, because showing times that aren't reasonable is pointless
-	/**
-	 * Time of day that the view starts at.
-	 */
-	private static final LocalTime timeStart = LocalTime.of(7, 0);
-	/**
-	 * Time of day that the view ends at.
-	 */
-	private static final LocalTime timeEnd = LocalTime.of(19, 0);
-	/**
-	 * Wrapper holding all course information.
-	 */
-	private final DataWrapper wrap;
-	/**
-	 * Currently displayed week in the {@link #grid}.
-	 */
-	private LocalDate day;
-	/**
-	 * The selected quiz to retake.
-	 */
-	private QuizBean quiz;
-	/**
-	 * The selected retake session to attend.
-	 */
-	private RetakeBean retake;
+public class StudentView extends ScheduleView {
 	/**
 	 * The number of days after a quiz a retake is allowed.
 	 */
 	private final int daysAvailable;
 	/**
-	 * Grid to display quizes and retakes on.
-	 */
-	private final GridPane grid = new GridPane();
-	/**
-	 * Easy access to all quiz-slots in the {@link #grid}.
-	 */
-	private final Set<QuizSlot> slots = new HashSet<>();
-	/**
 	 * Label displaying the selected {@link #quiz}.
 	 */
-	private final Label lblQuiz = new Label();
+	private Label lblQuiz;
 	/**
 	 * Label displaying the selected {@link #retake}.
 	 */
-	private final Label lblRetake = new Label();
+	private Label lblRetake;
 	/**
 	 * Text input for the student's name for scheduling.
 	 */
-	private final TextField txtName = new TextField();
+	private TextField txtName;
 	/**
 	 * Button to register the {@link #txtName student} for their retake.
 	 */
-	private final Button btnRegister = new Button("Register");
+	private Button btnRegister;
 
 	public StudentView(DataWrapper wrap) {
-		this.wrap = wrap;
-		setup();
-		repopulate();
+		super(wrap);
 		daysAvailable = wrap.getCourse().getRetakeDuration();
 	}
 
-	/**
-	 * Configure all UI elements.
-	 */
-	private void setup() {
-		// Setup navigation
-		// - day to mark beginning of week
-		// - can be moved forward/backwards in weeks
-		day = LocalDate.now();
-		day = day.minusDays(day.getDayOfWeek().getValue() - 1);
-		TilePane nav = new TilePane(Orientation.HORIZONTAL);
-		nav.setPadding(new Insets(5, 10, 5, 0));
-		nav.setHgap(10.0);
-		nav.setAlignment(Pos.CENTER);
-		Button btnPrev = new Button("Previous");
-		Button btnNext = new Button("  Next  ");
-		Label lblCurrent = new Label(getCurrentDateText());
-		btnPrev.setOnAction(e -> {
-			// Go back a week
-			day = day.minusDays(7);
-			lblCurrent.setText(getCurrentDateText());
-			repopulate();
-		});
-		btnNext.setOnAction(e -> {
-			// Go forward a week
-			day = day.plusDays(7);
-			lblCurrent.setText(getCurrentDateText());
-			repopulate();
-		});
-		nav.getChildren().addAll(btnPrev, lblCurrent, btnNext);
+	@Override
+	protected void setup() {
+		// Initialize components
+		lblQuiz = new Label();
+		lblRetake = new Label();
+		txtName = new TextField();
+		btnRegister = new Button("Register");
 		// Setup current selection display (registration form, has all needed fields)
 		TilePane registerForm = new TilePane(Orientation.HORIZONTAL);
 		registerForm.setAlignment(Pos.CENTER);
@@ -149,91 +79,26 @@ public class StudentView extends VBox {
 			}
 		});
 		registerForm.getChildren().addAll(lblQuiz, lblRetake, txtName, btnRegister);
-		// Set initial form text
+		// Set initial form text & add to the UI
 		updateForm();
-		// Add all components (grid is set up in 'repopulate')
-		getChildren().addAll(nav, registerForm, new ScrollPane(grid));
+		getChildren().add(registerForm);
+		// Setup in the super-class.
+		// This will create the schedule grid & date navigation.
+		super.setup();
 	}
 
-	/**
-	 * Populate the grid with the week indicated by the selected {@link #day}.
-	 */
-	private void repopulate() {
-		// Reset grid items
-		grid.getChildren().clear();
-		slots.clear();
-		// Get week range to display
-		LocalDate weekStart = day.minusDays(day.getDayOfWeek().getValue() - 1);
-		LocalDate weekEnd = weekStart.plusDays(6);
-		int row = 1;
-		// Create grid column labels (date)
-		for(LocalDate date = weekStart; !date.isAfter(weekEnd); date = date.plusDays(1)) {
-			Label lblDate = new Label(date.format(FMT_DATE));
-			lblDate.setPadding(new Insets(1));
-			lblDate.setTextAlignment(TextAlignment.CENTER);
-			GridPane.setHalignment(lblDate, HPos.CENTER);
-			grid.add(lblDate, date.getDayOfWeek().getValue(), 0);
-		}
-		// Create grid row labels (time)
-		for(LocalDateTime time = weekStart.atTime(timeStart); !time.isAfter(weekStart.atTime
-				(timeEnd)); time = time.plus(SLOT_LEN)) {
-			Label lblSlotTime = new Label(getTimeText(time));
-			GridPane.setHalignment(lblSlotTime, HPos.RIGHT);
-			grid.add(lblSlotTime, 0, row);
-			row++;
-		}
-		// Create grid entries (time-slots per day)
-		for(LocalDate date = weekStart; !date.isAfter(weekEnd); date = date.plusDays(1)) {
-			row = 1;
-			for(LocalDateTime time = date.atTime(timeStart); !time.isAfter(date.atTime(timeEnd));
-				time = time.plus(SLOT_LEN)) {
-				// Create the slot
-				QuizSlot slot = new QuizSlot(time);
-				Node view = slot.getView();
-				grid.add(view, slot.getTime().getDayOfWeek().getValue(), row);
-				row++;
-				// Find matching quizzes at the given time. Apply to the slot if found.
-				// Final to allow stream access to non-final variable "time".
-				final LocalDateTime timeAlias = time;
-				Optional<QuizBean> quizFound = Stream.concat(wrap.getQuizzes().stream(), wrap
-						.getRetakes().stream()).filter(q -> match(q, timeAlias)).findAny();
-				if(quizFound.isPresent()) {
-					slots.add(slot);
-					slot.setQuiz(quizFound.get());
-					registerEvents(slot);
-				}
-			}
-		}
-		updateSelectionCSS();
+	@Override
+	protected void onSelectQuiz(QuizBean quiz) {
+		this.quiz = quiz;
+		// Update the form
+		updateForm();
 	}
 
-	/**
-	 * Register click events so that the user can sign up for a quiz retake.
-	 *
-	 * @param slot
-	 * 		The timeslot to register.
-	 */
-	private void registerEvents(QuizSlot slot) {
-		slot.getView().setOnMouseClicked(e -> {
-			// Update selected quiz and retake elements
-			if(slot.getQuiz() instanceof RetakeBean) {
-				retake = (RetakeBean) slot.getQuiz();
-			} else {
-				quiz = slot.getQuiz();
-			}
-			// Update selection css pseudo classes of slots
-			updateSelectionCSS();
-			// Update the form
-			updateForm();
-		});
-	}
-
-	/**
-	 * Update the 'selected' pseudo-class of the slots. This more clearly shows the user which
-	 * item they have selected since they are more vibrant.
-	 */
-	private void updateSelectionCSS() {
-		slots.forEach(s -> s.setSelected(s.getQuiz().equals(quiz) || s.getQuiz().equals(retake)));
+	@Override
+	protected void onSelectRetake(RetakeBean retake) {
+		this.retake = retake;
+		// Update the form
+		updateForm();
 	}
 
 	/**
@@ -295,56 +160,11 @@ public class StudentView extends VBox {
 	}
 
 	/**
-	 * @return Formatted string of the current week date.
+	 * Update the 'selected' pseudo-class of the slots. This more clearly shows the user which
+	 * item they have selected since they are more vibrant.
 	 */
-	private String getCurrentDateText() {
-		return getDateText(day);
-	}
-
-	/**
-	 * @param date
-	 * 		Date to format.
-	 *
-	 * @return Formatted string of the given day.
-	 */
-	private String getDateText(LocalDate date) {
-		return date.format(FMT_DATE);
-	}
-
-	/**
-	 * @param time
-	 * 		Time to format.
-	 *
-	 * @return Formatted string of the given time.
-	 */
-	private String getTimeText(LocalTime time) {
-		return time.format(FMT_TIME);
-	}
-
-	/**
-	 * @param time
-	 * 		Time to format.
-	 *
-	 * @return Formatted string of the given time.
-	 */
-	private String getTimeText(LocalDateTime time) {
-		return time.format(FMT_TIME);
-	}
-
-	/**
-	 * Check if the given time matches the time the quiz is at.
-	 *
-	 * @param quiz
-	 * 		The quiz instance.
-	 * @param time
-	 * 		An arbitrary time.
-	 *
-	 * @return {@code true} if the quiz time matches the given time. {@code false} otherwise.
-	 */
-	private static boolean match(QuizBean quiz, LocalDateTime time) {
-		// Thankfully the time API implements equals in such a way that this works.
-		// The time specified in XML must be in a duration as specified by the constant above.
-		LocalDateTime quizTime = quiz.getDate().atTime(quiz.getTime());
-		return quizTime.equals(time);
+	@Override
+	protected void updateSelectionCSS() {
+		slots.forEach(s -> s.setSelected(s.getQuiz().equals(quiz) || s.getQuiz().equals(retake)));
 	}
 }
