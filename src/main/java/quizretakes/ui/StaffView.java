@@ -29,11 +29,15 @@ public class StaffView extends ScheduleView {
 
 	@Override
 	protected void onSelectQuiz(QuizBean quiz) {
-
+		// Select the quiz, unselect retake if selected
+		super.onSelectQuiz(quiz);
+		super.onSelectRetake(null);
 	}
 
 	@Override
 	protected void onSelectRetake(RetakeBean retake) {
-
+		// Select the retake, unselect quiz if selected
+		super.onSelectQuiz(null);
+		super.onSelectRetake(retake);
 	}
 }
