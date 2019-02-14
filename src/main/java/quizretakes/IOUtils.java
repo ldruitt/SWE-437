@@ -256,7 +256,7 @@ public class IOUtils {
 	 */
 	public static void initializeFonts() {
 		try {
-			Font.loadFont(QuizSchedule.class.getResource("/assets/hack.ttf").openStream(), 12);
+			Font.loadFont(QuizSchedule.class.getResourceAsStream("/assets/hack.ttf"), 12);
 		} catch(Exception e) {}
 	}
 }

@@ -14,7 +14,6 @@ import quizretakes.bean.AppointmentBean;
 import quizretakes.bean.QuizBean;
 import quizretakes.bean.RetakeBean;
 
-import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -39,11 +38,11 @@ public class StaffView extends ScheduleView {
 	/**
 	 * Resource path of custom avatars
 	 */
-	private final static String AVATAR_PATH = "assets/avatars/%s.png";
+	private final static String AVATAR_PATH = "/assets/avatars/%s.png";
 	/**
 	 * Resource path of default avatar. Used when a custom avatar does not exist.
 	 */
-	private final static String AVATAR_PATH_DEFAULT = "assets/avatar.png";
+	private final static String AVATAR_PATH_DEFAULT = "/assets/avatar.png";
 	/**
 	 * Pane that displays the students in a retake session or retaking a given quiz
 	 */
@@ -156,15 +155,13 @@ public class StaffView extends ScheduleView {
 				try {
 					// Default image
 					String file = AVATAR_PATH_DEFAULT;
-					URL url = Thread.currentThread().getContextClassLoader().getResource(file);
-					avatar = new Image(url.openStream());
+					avatar = new Image(StaffView.class.getResourceAsStream(file));
 					// Can't check if a resource exists in the classpath...
 					// - so the default loads first
 					// - if this succeeds we get a new avatar
 					// - otherwise we get an NPE
 					file = String.format(AVATAR_PATH, name.toLowerCase());
-					url = Thread.currentThread().getContextClassLoader().getResource(file);
-					avatar = new Image(url.openStream());
+					avatar = new Image(StaffView.class.getResourceAsStream(file));
 				} catch(Exception e) {
 					// No avatar for the student
 				}
