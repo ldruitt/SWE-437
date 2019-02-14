@@ -1,3 +1,4 @@
+/* Pastel / light-blue box, darker when selected */
 .quiz-slot {
 	-fx-background-color: rgba(0, 200, 255, 0.2);
 	-fx-border-color: rgba(0, 200, 255, 0.4);
@@ -8,6 +9,7 @@
 	-fx-background-color: rgba(0, 170, 215, 0.4);
 	-fx-border-color: rgba(0, 200, 255, 1);
 }
+/* Pastel / light-green box, darker when selected */
 .retake-slot {
 	-fx-background-color: rgba(100, 160, 0, 0.2);
 	-fx-border-color: rgba(100, 160, 0, 0.5);
@@ -18,8 +20,13 @@
 	-fx-background-color: rgba(80, 135, 0, 0.4);
 	-fx-border-color: rgba(100, 160, 0, 1);
 }
+/* Apply faint texture to background */
 .main {
 	-fx-background-image: url("assets/bg.png");
+}
+/* Used to allow proper spacing of string formatting */
+.list-cell{
+    -fx-font-family: "hack", "Monospaced";
 }
 /* Almost removes annoying blue focus ring */
 .root {
