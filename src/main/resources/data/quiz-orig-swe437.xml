@@ -31,6 +31,26 @@
     </dateGiven>
   </quiz>
 
+  <quiz>
+    <id>4</id>
+    <dateGiven>
+      <month>2</month>
+      <day>12</day>
+      <hour>10</hour>
+      <minute>30</minute>
+    </dateGiven>
+  </quiz>
+
+  <quiz>
+    <id>5</id>
+    <dateGiven>
+      <month>2</month>
+      <day>14</day>
+      <hour>10</hour>
+      <minute>30</minute>
+    </dateGiven>
+  </quiz>
+
 <!-- ... add remaining quizzes below -->
 
 </quizzes>

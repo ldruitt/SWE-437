@@ -22,7 +22,7 @@
       <minute>00</minute> <!--  0-59 -->
     </dateGiven>
   </retake>
-  
+
   <retake>
     <id>3</id>
     <location>EB 4444</location> <!-- TA's office hours -->
@@ -30,6 +30,50 @@
       <month>2</month> <!-- 01..12 -->
       <day>6</day> <!-- 1..31 -->
       <hour>11</hour> <!-- 0..23 -->
+      <minute>30</minute> <!--  0-59 -->
+    </dateGiven>
+  </retake>
+
+  <retake>
+    <id>4</id>
+    <location>EB 4444</location> <!-- TA's office hours -->
+    <dateGiven> <!-- Same format as in quizzes.xml -->
+      <month>2</month> <!-- 01..12 -->
+      <day>12</day> <!-- 1..31 -->
+      <hour>9</hour> <!-- 0..23 -->
+      <minute>30</minute> <!--  0-59 -->
+    </dateGiven>
+  </retake>
+
+  <retake>
+    <id>5</id>
+    <location>EB 4444</location> <!-- TA's office hours -->
+    <dateGiven> <!-- Same format as in quizzes.xml -->
+      <month>2</month> <!-- 01..12 -->
+      <day>13</day> <!-- 1..31 -->
+      <hour>9</hour> <!-- 0..23 -->
+      <minute>30</minute> <!--  0-59 -->
+    </dateGiven>
+  </retake>
+
+  <retake>
+    <id>6</id>
+    <location>EB 4444</location> <!-- TA's office hours -->
+    <dateGiven> <!-- Same format as in quizzes.xml -->
+      <month>2</month> <!-- 01..12 -->
+      <day>14</day> <!-- 1..31 -->
+      <hour>9</hour> <!-- 0..23 -->
+      <minute>30</minute> <!--  0-59 -->
+    </dateGiven>
+  </retake>
+
+  <retake>
+    <id>6</id>
+    <location>EB 4444</location> <!-- TA's office hours -->
+    <dateGiven> <!-- Same format as in quizzes.xml -->
+      <month>2</month> <!-- 01..12 -->
+      <day>20</day> <!-- 1..31 -->
+      <hour>9</hour> <!-- 0..23 -->
       <minute>30</minute> <!--  0-59 -->
     </dateGiven>
   </retake>
