@@ -3,7 +3,6 @@ package quizretakes.ui;
 import java.time.LocalDateTime;
 
 import javafx.css.PseudoClass;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import quizretakes.bean.QuizBean;

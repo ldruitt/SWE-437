@@ -16,6 +16,7 @@ import quizretakes.bean.RetakeBean;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -27,10 +28,25 @@ import java.util.stream.Collectors;
  * @author Matt Coley
  */
 public class StaffView extends ScheduleView {
-	private final static int SCROLL_SIZE = 190;
+	/**
+	 * Size of the content {@link #scroll}
+	 */
+	private final static int SCROLL_SIZE = 182;
+	/**
+	 * Scaled avatar size in pixels
+	 */
 	private final static int AVATAR_SIZE = 16;
+	/**
+	 * Resource path of custom avatars
+	 */
 	private final static String AVATAR_PATH = "assets/avatars/%s.png";
+	/**
+	 * Resource path of default avatar. Used when a custom avatar does not exist.
+	 */
 	private final static String AVATAR_PATH_DEFAULT = "assets/avatar.png";
+	/**
+	 * Pane that displays the students in a retake session or retaking a given quiz
+	 */
 	private ScrollPane scroll;
 
 	public StaffView(DataWrapper wrap) {
@@ -41,7 +57,8 @@ public class StaffView extends ScheduleView {
 	protected void setup() {
 		// Initialize components
 		// - Initial message to indicate action to take
-		Label lblTemp = new Label("Select a quiz to display students retaking that quiz.\nSelect a retake session to show all the students in that section.");
+		Label lblTemp = new Label("Select a quiz to display students retaking that quiz.\nSelect "
+				+ "a retake session to show all the students in that section.");
 		scroll = new ScrollPane();
 		scroll.setContent(lblTemp);
 		scroll.setMinHeight(SCROLL_SIZE);
@@ -100,16 +117,20 @@ public class StaffView extends ScheduleView {
 	 * 		List of appointments.
 	 */
 	private void setupList(List<AppointmentBean> appts) {
+		// Create ListView of appointments
 		ObservableList<AppointmentBean> items = FXCollections.observableList(appts);
 		ListView<AppointmentBean> list = new ListView<>(items);
 		list.setCellFactory(l -> new AvatarCell());
+		// Update content scrollpane
 		scroll.setContent(list);
 	}
 
 	/**
 	 * ListCell that displays an appointment.
 	 */
-	static class AvatarCell extends ListCell<AppointmentBean> {
+	class AvatarCell extends ListCell<AppointmentBean> {
+		private static final String fmt = "%-13s - Quiz-%d at: %s, %s:%s";
+
 		@Override
 		protected void updateItem(AppointmentBean item, boolean empty) {
 			super.updateItem(item, empty);
@@ -118,25 +139,38 @@ public class StaffView extends ScheduleView {
 				setText(null);
 				setGraphic(null);
 			} else {
-				// Graphic of student avatar, if one is present
-				Image graphic = null;
+				// Get the following info:
+				// - Avatar of student, default image if no custom one exists
+				// - Name of student
+				// - Quiz to be retaken
+				// - Location of retake
+				Image avatar = null;
 				String name = item.getName();
+				int quizID = item.getQuizID();
+				int retakeID = item.getRetakeID();
+				// Get retake location
+				Optional<RetakeBean> retake = wrap.getRetakes().get(retakeID);
+				String location = retake.isPresent() ? retake.get().getLocation() : "?";
+				String date = retake.isPresent() ? getDateText(retake.get().getDate()) : "?";
+				String time = retake.isPresent() ? getTimeText(retake.get().getTime()) : "?";
 				try {
 					// Default image
 					String file = AVATAR_PATH_DEFAULT;
 					URL url = Thread.currentThread().getContextClassLoader().getResource(file);
-					graphic = new Image(url.openStream());
+					avatar = new Image(url.openStream());
 					// Can't check if a resource exists in the classpath...
 					// - so the default loads first
 					// - if this succeeds we get a new avatar
 					// - otherwise we get an NPE
 					file = String.format(AVATAR_PATH, name.toLowerCase());
 					url = Thread.currentThread().getContextClassLoader().getResource(file);
-					graphic = new Image(url.openStream());
-				} catch(Exception e) {}
+					avatar = new Image(url.openStream());
+				} catch(Exception e) {
+					// No avatar for the student
+				}
 				// Setup cell
-				setText(name);
-				ImageView view = new ImageView(graphic);
+				setText(String.format(fmt, name, quizID, location, date, time));
+				ImageView view = new ImageView(avatar);
 				view.setFitHeight(AVATAR_SIZE);
 				view.setFitWidth(AVATAR_SIZE);
 				setGraphic(view);

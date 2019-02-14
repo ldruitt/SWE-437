@@ -24,6 +24,10 @@ public class Retakes implements Iterable<RetakeBean> {
 		return retakes.stream();
 	}
 
+	public Optional<RetakeBean> get(int id) {
+		return stream().filter(r -> r.getID() == id).findAny();
+	}
+
 	@Override
 	public Iterator<RetakeBean> iterator() {
 		return retakes.iterator();

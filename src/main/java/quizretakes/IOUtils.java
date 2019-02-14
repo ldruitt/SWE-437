@@ -1,5 +1,6 @@
 package quizretakes;
 
+import javafx.scene.text.Font;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import quizretakes.bean.*;
@@ -14,7 +15,6 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.util.*;
 import java.io.*;
-import java.util.stream.Stream;
 
 /**
  * Course XML data utilities.
@@ -249,5 +249,14 @@ public class IOUtils {
 	 */
 	private static String getValue(Element host, String name) {
 		return host.getElementsByTagName(name).item(0).getChildNodes().item(0).getNodeValue();
+	}
+
+	/**
+	 * Initialize classpath-resource font.
+	 */
+	public static void initializeFonts() {
+		try {
+			Font.loadFont(QuizSchedule.class.getResource("/assets/hack.ttf").openStream(), 12);
+		} catch(Exception e) {}
 	}
 }

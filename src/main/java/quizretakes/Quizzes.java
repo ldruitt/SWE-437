@@ -24,6 +24,10 @@ public class Quizzes implements Iterable<QuizBean> {
 		return quizzes.stream();
 	}
 
+	public Optional<QuizBean> get(int id) {
+		return stream().filter(q -> q.getID() == id).findAny();
+	}
+
 	@Override
 	public Iterator<QuizBean> iterator() {
 		return quizzes.iterator();

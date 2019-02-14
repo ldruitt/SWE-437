@@ -6,7 +6,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -89,6 +88,12 @@ public class QuizSchedule extends Application {
 	 * 		Unused.
 	 */
 	public static void main(String[] args) {
+		try {
+			IOUtils.initializeFonts();
+		} catch(Exception e) {
+			System.err.println("Failed to load fonts");
+			// If it fails, its only a font.
+		}
 		launch(args);
 	}
 }
