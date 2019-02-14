@@ -124,7 +124,7 @@ public class StudentView extends ScheduleView {
 		if(!disabled) {
 			// Button is set to not be disabled, so the raw-input is OK.
 			// Need to do a date-check on the quiz/retake relation.
-			int diff = retake.getDate().getDayOfYear() - quiz.getDate().getDayOfYear();
+			int diffDate = retake.getDate().getDayOfYear() - quiz.getDate().getDayOfYear();
 			CourseBean c = wrap.getCourse();
 			LocalDate end = quiz.getDate().plusDays(daysAvailable);
 			int allowed = daysAvailable;
@@ -132,8 +132,10 @@ public class StudentView extends ScheduleView {
 			if(end.isAfter(c.getStartSkip()) && end.isBefore(c.getEndSkip())) {
 				allowed += 7;
 			}
-			// Ensure selected items are within the allowed number of days.
-			disabled = diff < 0 || diff > allowed;
+			// Ensure selected items are within the allowed number of days and not in the past
+			disabled |= diffDate < 0;
+			disabled |= diffDate == 0 && retake.getTime().isBefore(quiz.getTime());
+			disabled |= diffDate > allowed;
 		}
 		btnRegister.setDisable(disabled);
 	}
