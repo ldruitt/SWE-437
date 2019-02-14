@@ -41,7 +41,7 @@ public class StaffView extends ScheduleView {
 	protected void setup() {
 		// Initialize components
 		// - Initial message to indicate action to take
-		Label lblTemp = new Label("Select a quiz or retake session");
+		Label lblTemp = new Label("Select a quiz to display students retaking that quiz.\nSelect a retake session to show all the students in that section.");
 		scroll = new ScrollPane();
 		scroll.setContent(lblTemp);
 		scroll.setMinHeight(SCROLL_SIZE);
