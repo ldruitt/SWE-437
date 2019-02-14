@@ -40,6 +40,7 @@ The following pros & cons pertain to the _[prior state](https://github.com/Col-E
     * Updated XML test data
 * Student UI _(Updated)_
     * Swap location of navigation-bar with form-inputs
+    * Fix flaw allowing students to sign up for retaking a quiz the same day, before its actually given
 * Staff UI _(New)_
     * Schedule display with section on top for displaying appointment information
         * Student name _(optional avatars, samples provided)_ + quiz retaken + appointment location/time
