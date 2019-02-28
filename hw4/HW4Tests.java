@@ -127,6 +127,11 @@ public class HW4Tests {
 
 	/**
 	 * Don't print retake dates that have already passed.
+	 *
+	 *The observability of the results of this test are high because a tester can detect the behavior 
+	 *of the program when a past retake is the only available option based on the output of this test.
+	 *The controllability of this test was high as well as it is possible to set a quiz and retake in 
+	 *the past and to use this as input. 
 	 */
 	@Test
 	public void testOutdated() {
@@ -161,6 +166,11 @@ public class HW4Tests {
 	/**
 	 * Print retake sessions that are today or later, but not quizzes that occur after the retake
 	 * (You can't retake a quiz that hasn't occurred)
+	 *
+	 *There is high observability for this case because the expected result would be shown through the 
+	 *programs behavior when a retake may be scheduled before a quiz which means it is observable to the tester.
+	 *The inputs for this case are highly controllable as the quiz retake schedule may be manipulated to reflect a 
+	 *schedule with the only retake being before the only quiz.
 	 */
 	@Test
 	public void testRetakeBeforeQuiz() {
@@ -197,6 +207,11 @@ public class HW4Tests {
 	/**
 	 * You shouldn't be able to retake a quiz at the same time the quiz is given...
 	 * (but quizschedule allows this)
+	 *
+	 *The observability for this test case is high as the effect of the input is simply a lack of output assuming 
+	 *the program is behaving with the logic that one cannot take a retake at the same time one is participating in a current quiz
+	 *While the input for this test case is highly controllable and there is a way to have this case run in 
+	 *the given code, it should be more limited in its ability to schedule a retake at the same time as a quiz
 	 */
 	@Test
 	public void testRetakeSameTime() {
@@ -222,6 +237,10 @@ public class HW4Tests {
 
 	/**
 	 * Print out the retake/quiz combo for a retake later in the day.
+	 *This has a high observability because the programs response can be tested against expected behavior
+	 *when a retake is scheduled later in the same day.
+	 *The controllability for this test case is high as the retake schedule could easily contain this 
+	 *combination of data if desired.
 	 */
 	@Test
 	public void testRetakeLaterInDay() {
@@ -247,6 +266,11 @@ public class HW4Tests {
 
 	/**
 	 * Print out the retake/quiz combo for a retake tomorrow.
+	 *
+	 *This test case is highly observable and will return a result that will show the programs behavior when a 
+	 *retake is scheduled the next day to the tester.
+	 *The controllability is high for this case because we can manipulate the retake schedule to contain this
+	 *information.
 	 */
 	@Test
 	public void testRetakeTomorrow() {
@@ -275,6 +299,11 @@ public class HW4Tests {
 
 	/**
 	 * Print out the retake/quiz combo for the last day possible.
+	 *
+	 *This test case is highly observable and will return a result that will show the programs behavior when 
+	 *a retake is at the limit of available days to the tester.
+	 *The controllability is high for this case because we can manipulate the retake schedule to contain this
+	 *information.
 	 */
 	@Test
 	public void testRetakeDaysAvailable() {
@@ -306,6 +335,9 @@ public class HW4Tests {
 	/**
 	 * Don't print retake dates that exceed the days allowed.
 	 * Since you can't schedule a retake ahead-of-time, testing for today+daysAvailable is valid.
+	 *The results of this test are highly observable because the expected behavior of the program when a retake 
+	 *is only scheduled after the boundary of the days available will be revealed to the tester.
+	 *The controllability is high for this test because we can easily add this data to the retake schedule.
 	 */
 	@Test
 	public void testRetakeDaysAvailablePlusOne() {
@@ -329,7 +361,12 @@ public class HW4Tests {
 			fail("Showing retake-session past allowed retake date.");
 		}
 	}
-
+	/*
+	*This test case is highly observable because the expected behavior can be compared to the actual behavior
+	*when a skip week is scheduled between quizzes and retakes.
+	*The inputs for this test were highly controllable, the skip week, test dates, and retake dates can all be 
+	*set by the tester.
+	*/
 	@Test
 	public void testSkippableSkip() {
 		LocalDate date = today;
@@ -370,6 +407,10 @@ public class HW4Tests {
 	 * +14 days. So the retake is scheduled 3 weeks instead.
 	 * <br>
 	 * The user should be allowed to sign up... but isn't allowed. Fail.
+	 *
+	 *The observability is high for this test as it should be clear from the results how the process executes 
+	 *and handles a retake possibly being scheduled after a skip week interferes with the retake schedule.
+	 *The controllability is high because of the ability to set the quiz dates, retake schedule, and skip week.
 	 */
 	@Test
 	public void testRetakeBeyondSkip() {
@@ -406,6 +447,11 @@ public class HW4Tests {
 	/**
 	 * The retake session is during the skip-region... You shouldn't be able to sign up for this,
 	 * but quizschedule allows you to do so... Fail.
+	 *
+	 *This test has a high observability as we can perceive the result of the output when a quiz might be 
+	 *scheduled during a skip week
+	 *The controllability for this test was high as the program allowed us to do schedule a retake during a
+	 *skip week, however, logically it should not allow this behavior.
 	 */
 	@Test
 	public void testRetakeDuringSkip() {
